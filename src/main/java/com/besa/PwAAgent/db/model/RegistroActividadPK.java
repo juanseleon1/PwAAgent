@@ -19,7 +19,7 @@ public class RegistroActividadPK implements Serializable {
     private Date fecha;
     @Basic(optional = false)
     @Column(name = "perfil_pwa_cedula")
-    private String perfilPwaCedula;
+    private String PwAProfileCedula;
     @Basic(optional = false)
     @Column(name = "tipo")
     private String tipo;
@@ -30,9 +30,9 @@ public class RegistroActividadPK implements Serializable {
     public RegistroActividadPK() {
     }
 
-    public RegistroActividadPK(Date fecha, String perfilPwaCedula, String tipo, int actividadPwaId) {
+    public RegistroActividadPK(Date fecha, String PwAProfileCedula, String tipo, int actividadPwaId) {
         this.fecha = fecha;
-        this.perfilPwaCedula = perfilPwaCedula;
+        this.PwAProfileCedula = PwAProfileCedula;
         this.tipo = tipo;
         this.actividadPwaId = actividadPwaId;
     }
@@ -49,12 +49,12 @@ public class RegistroActividadPK implements Serializable {
         this.fecha = fecha;
     }
 
-    public String getPerfilPwaCedula() {
-        return perfilPwaCedula;
+    public String getPwAProfileCedula() {
+        return PwAProfileCedula;
     }
 
-    public void setPerfilPwaCedula(String perfilPwaCedula) {
-        this.perfilPwaCedula = perfilPwaCedula;
+    public void setPwAProfileCedula(String PwAProfileCedula) {
+        this.PwAProfileCedula = PwAProfileCedula;
     }
 
     public String getTipo() {
@@ -77,7 +77,7 @@ public class RegistroActividadPK implements Serializable {
     public int hashCode() {
         int hash = 0;
         hash += (fecha != null ? fecha.hashCode() : 0);
-        hash += (perfilPwaCedula != null ? perfilPwaCedula.hashCode() : 0);
+        hash += (PwAProfileCedula != null ? PwAProfileCedula.hashCode() : 0);
         hash += (tipo != null ? tipo.hashCode() : 0);
         hash += (int) actividadPwaId;
         return hash;
@@ -85,7 +85,7 @@ public class RegistroActividadPK implements Serializable {
 
     @Override
     public String toString() {
-        return "BESA.PwARobot.DBConnection.SREntities.RegistroActividadPK[ fecha=" + fecha + ", perfilPwaCedula=" + perfilPwaCedula + ", tipo=" + tipo + ", actividadPwaId=" + actividadPwaId + " ]";
+        return "BESA.PwARobot.DBConnection.SREntities.RegistroActividadPK[ fecha=" + fecha + ", PwAProfileCedula=" + PwAProfileCedula + ", tipo=" + tipo + ", actividadPwaId=" + actividadPwaId + " ]";
     }
     
 }

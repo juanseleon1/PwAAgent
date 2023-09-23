@@ -1,4 +1,4 @@
-package com.besa.PwAAgent.agent.goals;
+package com.besa.PwAAgent.agent.goals.action;
 
 import com.besa.PwAAgent.db.model.PreferenciaXBaile;
 import com.besa.PwAAgent.db.model.PreferenciaXCancion;

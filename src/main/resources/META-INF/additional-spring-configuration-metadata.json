@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "robot.ip",
+    "type": "java.lang.String",
+    "description": "A description for 'robot.ip'"
+  },
+  {
+    "name": "robot.port",
+    "type": "java.lang.String",
+    "description": "A description for 'robot.port'"
+  }
+]}

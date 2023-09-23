@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import com.besa.PwAAgent.agent.goals.CuenteriaContext;
-import com.besa.PwAAgent.agent.goals.MusicoTerapia;
+import com.besa.PwAAgent.agent.goals.action.CuenteriaContext;
+import com.besa.PwAAgent.agent.goals.action.MusicoTerapia;
 
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.SRTask;

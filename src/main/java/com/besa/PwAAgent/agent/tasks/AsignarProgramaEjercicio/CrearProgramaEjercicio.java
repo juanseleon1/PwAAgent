@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-import com.besa.PwAAgent.agent.goals.AsignarProgramaEjercicio;
-import com.besa.PwAAgent.agent.goals.AsignarProgramaEjercicioContext;
+import com.besa.PwAAgent.agent.goals.action.AsignarProgramaEjercicio;
+import com.besa.PwAAgent.agent.goals.action.AsignarProgramaEjercicioContext;
 import com.besa.PwAAgent.db.model.Horario;
 import com.besa.PwAAgent.db.model.ProgramaEjercicio;
 import com.besa.PwAAgent.db.model.userprofile.PwAExerciseProfile;
@@ -20,12 +20,13 @@ import rational.mapping.Believes;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.SRTask;
 
-
 public class CrearProgramaEjercicio extends SRTask {
 
     private HashMap<String, Object> infoServicio = new HashMap<>();
     Scanner scan;
     boolean puedoProseguir;
+    // @Autowired
+    // private PwAProfileRepository pwAProfileRepository;
 
     public CrearProgramaEjercicio() {
         System.out.println(" (ProgramarRutina) - Meta construida.");
@@ -37,14 +38,15 @@ public class CrearProgramaEjercicio extends SRTask {
     public void executeTask(Believes parameters) {
         BeliefAgent blvs = (BeliefAgent) parameters;
         String currUser = blvs.getActiveUsers().get(0);
-        PwAProfile miPerfil = (PwAProfile)blvs.getUserProfile(currUser);
+        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
         int respuesta;
         String userId = miPerfil.getUserContext().getSocioDemoContext().getId();
-        PwAMedicalContext medicalContext = (PwAMedicalContext)miPerfil.getUserMedicalContext();
-        AsignarProgramaEjercicioContext serviceContext = (AsignarProgramaEjercicioContext) blvs.getServiceContext(AsignarProgramaEjercicio.class);
+        PwAMedicalContext medicalContext = (PwAMedicalContext) miPerfil.getUserMedicalContext();
+        AsignarProgramaEjercicioContext serviceContext = (AsignarProgramaEjercicioContext) blvs
+                .getServiceContext(AsignarProgramaEjercicio.class);
         if (miPerfil.getExerciseProfile() == null) {
             try {
-                //Say - Solo entra acá cuando vé que no tiene un perfil de ejercicio.
+                // Say - Solo entra acá cuando vé que no tiene un perfil de ejercicio.
                 infoServicio = new HashMap<>();
                 infoServicio.put("content", "Bienvenidos a mi servicio de programa de ejercicios basado en Vivifrail! "
                         + " Al final de este programa, garantizo que quedaremos fuertes, flexibles y saludables.");
@@ -52,9 +54,10 @@ public class CrearProgramaEjercicio extends SRTask {
                 // -- NEW --
                 if (medicalContext.getSppb() == null || medicalContext.getRiesgoCaida() == null) {
                     PwAMedicalContext updatedPM = (PwAMedicalContext) miPerfil.getUserMedicalContext();
-                    infoServicio.put("content", "Veo que no tengo los datos apropiados para asignar un programa de ejercicio."
-                            + "Necesito el resultado de las pruebas SPPB y Caida de Riesgo para asignar mi"
-                            + "programa de ejercicio! Porfavor, refiere a la consola de B.D.I para ingresar tus resultados.");
+                    infoServicio.put("content",
+                            "Veo que no tengo los datos apropiados para asignar un programa de ejercicio."
+                                    + "Necesito el resultado de las pruebas SPPB y Caida de Riesgo para asignar mi"
+                                    + "programa de ejercicio! Porfavor, refiere a la consola de B.D.I para ingresar tus resultados.");
                     sendActionRequest(infoServicio, "talk");
                     infoServicio = new HashMap<>();
                     serviceContext.setExistenPruebasEjercicio(false);
@@ -69,8 +72,10 @@ public class CrearProgramaEjercicio extends SRTask {
                     } else {
 
                         updatedPM.setSppb(respuesta);
-                        respuesta = preguntarXConsola(1, 5, "Genial! Ahora ingresa el puntaje, de uno a cuatro, de riesgo de Caida del PwA"
-                                + ", Ingresa cinco para cancelar", blvs);
+                        respuesta = preguntarXConsola(1, 5,
+                                "Genial! Ahora ingresa el puntaje, de uno a cuatro, de riesgo de Caida del PwA"
+                                        + ", Ingresa cinco para cancelar",
+                                blvs);
                         if (respuesta == 5) {
                             System.out.println(" Se ha cancelado la creación del perfil de ejercicio. ");
                             serviceContext.setCancelarProgramacionEjercicio(true);
@@ -79,15 +84,16 @@ public class CrearProgramaEjercicio extends SRTask {
                             updatedPM.setRiesgoCaida(respuesta);
                             System.out.println(" Se ha guardado los valores! ");
                         }
-                        //TODO: RESPwABDInterface.updateMedicalProfile(updatedPM);
+                        // TODO: RESPwABDInterface.updateMedicalProfile(updatedPM);
                         // -- persistir en base de datos.
                     }
 
                 }
 
-                
-                respuesta = preguntarXConsola(1, 3, "Listo, Voy a ajustar el nuevo programa para ser realizado todos los dias a las 3 p.m, EST."
-                        + "En la consola BESA, ingresa 1 para confirmar, 2 para cambiar e ingresar tu propio horario, y 3 para cancelar.", blvs);
+                respuesta = preguntarXConsola(1, 3,
+                        "Listo, Voy a ajustar el nuevo programa para ser realizado todos los dias a las 3 p.m, EST."
+                                + "En la consola BESA, ingresa 1 para confirmar, 2 para cambiar e ingresar tu propio horario, y 3 para cancelar.",
+                        blvs);
 
                 switch (respuesta) {
 
@@ -116,29 +122,28 @@ public class CrearProgramaEjercicio extends SRTask {
                         date = calendar.getTime();
                         PwAExerciseProfile nuevoPwAExerciseProfile = new PwAExerciseProfile(userId, 0,
                                 date, 15, 0);
-                        
+
                         List<ProgramaEjercicio> misProgramas = serviceContext.getExercisePrograms();
                         for (int i = 0; i < misProgramas.size(); i++) {
                             if (misProgramas.get(i).getNombre().equals("C1")) {
                                 nuevoPwAExerciseProfile.setNombrePrograma(misProgramas.get(i));
                             }
                         }
-                        
-                        //RESPwABDInterface.createExcerciseProfile(nuevoPwAExerciseProfile);
+
+                        // RESPwABDInterface.createExcerciseProfile(nuevoPwAExerciseProfile);
                         miPerfil.setExerciseProfile(nuevoPwAExerciseProfile);
                         miPerfil.setTieneProgramaEjercicio(true);
-                        //RESPwABDInterface.updateProfile(miPerfil);
-                        miPerfil.updateProfileInBelieves(userId);
+                        // RESPwABDInterface.updateProfile(miPerfil);
                         // --- CREAR HORARIO --- //
                         List<Horario> horario = new ArrayList<>();
                         for (int i = 0; i < 7; i++) {
                             Horario aux = new Horario(i + 1, 15);
                             aux.setCedula(nuevoPwAExerciseProfile);
-                            //RESPwABDInterface.createSchedule(aux);
+                            // RESPwABDInterface.createSchedule(aux);
                             horario.add(aux);
                         }
                         nuevoPwAExerciseProfile.setHorarioList(horario);
-                        //RESPwABDInterface.updateExcerciseProfile(nuevoPwAExerciseProfile);
+                        // RESPwABDInterface.updateExcerciseProfile(nuevoPwAExerciseProfile);
                         break;
 
                     default:
@@ -156,7 +161,6 @@ public class CrearProgramaEjercicio extends SRTask {
                 System.out.println(e + "...ERROR al Crear perfil!");
             }
         }
-        miPerfil.updateProfileInBelieves(userId);
         puedoProseguir = true;
         System.out.println(" (ProgramarRutina) - Meta Ejecutada.");
     }
@@ -178,9 +182,10 @@ public class CrearProgramaEjercicio extends SRTask {
 
     private int asignarHorario(BeliefAgent blvs) {
         List<Integer> horaList = new ArrayList<>();
-        AsignarProgramaEjercicioContext serviceContext = (AsignarProgramaEjercicioContext) blvs.getServiceContext(AsignarProgramaEjercicio.class);
+        AsignarProgramaEjercicioContext serviceContext = (AsignarProgramaEjercicioContext) blvs
+                .getServiceContext(AsignarProgramaEjercicio.class);
         String currUser = blvs.getActiveUsers().get(0);
-        PwAProfile miPerfil = (PwAProfile)blvs.getUserProfile(currUser);
+        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
         String userId = miPerfil.getUserContext().getSocioDemoContext().getId();
 
         int respuesta = 2;
@@ -193,7 +198,8 @@ public class CrearProgramaEjercicio extends SRTask {
             horaList.add(preguntarXConsola(0, 24, "Selecciona una hora para el dia Sabado:", blvs));
             horaList.add(preguntarXConsola(0, 24, "Selecciona una hora para el dia Domingo:", blvs));
             respuesta = preguntarXConsola(1, 3, "¿Esta bien el horario que escogiste?"
-                    + ". Ingresa en la consola 1 para confirmar, dos para intentar de nuevo, y tres para cancelar.", blvs);
+                    + ". Ingresa en la consola 1 para confirmar, dos para intentar de nuevo, y tres para cancelar.",
+                    blvs);
 
         }
         if (respuesta == 3) {
@@ -209,35 +215,34 @@ public class CrearProgramaEjercicio extends SRTask {
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
             System.out.println("dia " + dayOfWeek);
-            if (hour > horaList.get(dayOfWeek -1)) {
+            if (hour > horaList.get(dayOfWeek - 1)) {
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
 
             }
             calendar.set(Calendar.MINUTE, 0);
             calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, horaList.get(dayOfWeek -1));
+            calendar.set(Calendar.HOUR_OF_DAY, horaList.get(dayOfWeek - 1));
             date = calendar.getTime();
             PwAExerciseProfile nuevoPwAExerciseProfile = new PwAExerciseProfile(userId,
-                     0, date, horaList.get(dayOfWeek -1), 0);
+                    0, date, horaList.get(dayOfWeek - 1), 0);
             List<ProgramaEjercicio> misProgramas = serviceContext.getExercisePrograms();
 
-                        for (int i = 0; i < misProgramas.size(); i++) {
-                            if (misProgramas.get(i).getNombre().equals("C1")) {
-                                nuevoPwAExerciseProfile.setNombrePrograma(misProgramas.get(i));
-                            }
-                        }
-            //RESPwABDInterface.createExcerciseProfile(nuevoPwAExerciseProfile);
+            for (int i = 0; i < misProgramas.size(); i++) {
+                if (misProgramas.get(i).getNombre().equals("C1")) {
+                    nuevoPwAExerciseProfile.setNombrePrograma(misProgramas.get(i));
+                }
+            }
+            // RESPwABDInterface.createExcerciseProfile(nuevoPwAExerciseProfile);
             miPerfil.setExerciseProfile(nuevoPwAExerciseProfile);
-            //RESPwABDInterface.updateProfile(blvs.getbPerfilPwA().getPerfil());
-            miPerfil.updateProfileInBelieves(userId);
+            // RESPwABDInterface.updateProfile(blvs.getbPwAProfile().getPerfil());
             // -- CREAR HORARIO -- //
-            
+
             System.out.println("y aca?");
             List<Horario> horario = new ArrayList<>();
             for (int i = 0; i < 7; i++) {
                 Horario aux = new Horario(i + 1, horaList.get(i));
                 aux.setCedula(nuevoPwAExerciseProfile);
-                //RESPwABDInterface.createSchedule(aux);
+                // RESPwABDInterface.createSchedule(aux);
                 horario.add(aux);
             }
             nuevoPwAExerciseProfile.setHorarioList(horario);

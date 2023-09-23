@@ -6,8 +6,8 @@ import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.SRTask;
 import java.util.HashMap;
 import java.util.List;
 
-import com.besa.PwAAgent.agent.goals.Cuenteria;
-import com.besa.PwAAgent.agent.goals.CuenteriaContext;
+import com.besa.PwAAgent.agent.goals.action.Cuenteria;
+import com.besa.PwAAgent.agent.goals.action.CuenteriaContext;
 import com.besa.PwAAgent.db.model.PreferenciaXCuento;
 import com.besa.PwAAgent.db.model.userprofile.PwAPreferenceContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAProfile;

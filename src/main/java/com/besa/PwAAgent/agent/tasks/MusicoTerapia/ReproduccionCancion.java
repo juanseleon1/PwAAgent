@@ -5,8 +5,8 @@ import rational.mapping.Believes;
 import java.util.HashMap;
 import java.util.List;
 
-import com.besa.PwAAgent.agent.goals.MusicoTerapia;
-import com.besa.PwAAgent.agent.goals.MusicoTerapiaContext;
+import com.besa.PwAAgent.agent.goals.action.MusicoTerapia;
+import com.besa.PwAAgent.agent.goals.action.MusicoTerapiaContext;
 import com.besa.PwAAgent.db.model.PreferenciaXBaile;
 import com.besa.PwAAgent.db.model.userprofile.PwAPreferenceContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAProfile;

@@ -30,7 +30,7 @@ import jakarta.persistence.Table;
 
 @NamedQueries({
     @NamedQuery(name = "PwAMedicalContext.findAll", query = "SELECT p FROM PwAMedicalContext p"),
-    @NamedQuery(name = "PwAMedicalContext.findByPerfilPwaCedula", query = "SELECT p FROM PwAMedicalContext p WHERE p.perfilPwaCedula = :perfilPwaCedula"),
+    @NamedQuery(name = "PwAMedicalContext.findByPwAProfileCedula", query = "SELECT p FROM PwAMedicalContext p WHERE p.PwAProfileCedula = :PwAProfileCedula"),
     @NamedQuery(name = "PwAMedicalContext.findByTomaMedicamentos", query = "SELECT p FROM PwAMedicalContext p WHERE p.tomaMedicamentos = :tomaMedicamentos"),
     @NamedQuery(name = "PwAMedicalContext.findByDiscapAuditiva", query = "SELECT p FROM PwAMedicalContext p WHERE p.discapAuditiva = :discapAuditiva"),
     @NamedQuery(name = "PwAMedicalContext.findByDiscapVisual", query = "SELECT p FROM PwAMedicalContext p WHERE p.discapVisual = :discapVisual"),
@@ -46,7 +46,7 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "perfil_pwa_cedula")
-    private String perfilPwaCedula;
+    private String PwAProfileCedula;
     @Basic(optional = false)
     @Column(name = "toma_medicamentos")
     private int tomaMedicamentos;
@@ -77,7 +77,7 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
     private CausaDemencia causaDemenciaCondicion;
     @JoinColumn(name = "perfil_pwa_cedula", referencedColumnName = "cedula", insertable = false, updatable = false)
     @OneToOne(optional = false, fetch = FetchType.EAGER)
-    private PerfilPwa perfilPwa;
+    private PwAProfile PwAProfile;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "medicoPwaCedula", fetch = FetchType.EAGER)
     private List<ActividadRutinaria> actividadRutinariaList;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "PwAMedicalContext", fetch = FetchType.EAGER)
@@ -86,12 +86,12 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
     public PwAMedicalContext() {
     }
 
-    public PwAMedicalContext(String perfilPwaCedula) {
-        this.perfilPwaCedula = perfilPwaCedula;
+    public PwAMedicalContext(String PwAProfileCedula) {
+        this.PwAProfileCedula = PwAProfileCedula;
     }
 
-    public PwAMedicalContext(String perfilPwaCedula, int tomaMedicamentos, int discapAuditiva, int discapVisual, int discapMotora, int estadoEnfermedad, int periodoVigila, int fast) {
-        this.perfilPwaCedula = perfilPwaCedula;
+    public PwAMedicalContext(String PwAProfileCedula, int tomaMedicamentos, int discapAuditiva, int discapVisual, int discapMotora, int estadoEnfermedad, int periodoVigila, int fast) {
+        this.PwAProfileCedula = PwAProfileCedula;
         this.tomaMedicamentos = tomaMedicamentos;
         this.discapAuditiva = discapAuditiva;
         this.discapVisual = discapVisual;
@@ -101,12 +101,12 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
         this.fast = fast;
     }
 
-    public String getPerfilPwaCedula() {
-        return perfilPwaCedula;
+    public String getPwAProfileCedula() {
+        return PwAProfileCedula;
     }
 
-    public void setPerfilPwaCedula(String perfilPwaCedula) {
-        this.perfilPwaCedula = perfilPwaCedula;
+    public void setPwAProfileCedula(String PwAProfileCedula) {
+        this.PwAProfileCedula = PwAProfileCedula;
     }
 
     public int getTomaMedicamentos() {
@@ -189,12 +189,12 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
         this.causaDemenciaCondicion = causaDemenciaCondicion;
     }
 
-    public PerfilPwa getPerfilPwa() {
-        return perfilPwa;
+    public PwAProfile getPwAProfile() {
+        return PwAProfile;
     }
 
-    public void setPerfilPwa(PerfilPwa perfilPwa) {
-        this.perfilPwa = perfilPwa;
+    public void setPwAProfile(PwAProfile PwAProfile) {
+        this.PwAProfile = PwAProfile;
     }
 
     
@@ -217,7 +217,7 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (perfilPwaCedula != null ? perfilPwaCedula.hashCode() : 0);
+        hash += (PwAProfileCedula != null ? PwAProfileCedula.hashCode() : 0);
         return hash;
     }
 

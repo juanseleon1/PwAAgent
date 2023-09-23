@@ -4,7 +4,7 @@ package com.besa.PwAAgent.db.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.besa.PwAAgent.db.model.userprofile.PerfilPwa;
+import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -25,7 +25,7 @@ import jakarta.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "RegistroActividad.findAll", query = "SELECT r FROM RegistroActividad r"),
     @NamedQuery(name = "RegistroActividad.findByFecha", query = "SELECT r FROM RegistroActividad r WHERE r.registroActividadPK.fecha = :fecha"),
-    @NamedQuery(name = "RegistroActividad.findByPerfilPwaCedula", query = "SELECT r FROM RegistroActividad r WHERE r.registroActividadPK.perfilPwaCedula = :perfilPwaCedula"),
+    @NamedQuery(name = "RegistroActividad.findByPwAProfileCedula", query = "SELECT r FROM RegistroActividad r WHERE r.registroActividadPK.PwAProfileCedula = :PwAProfileCedula"),
     @NamedQuery(name = "RegistroActividad.findByTipo", query = "SELECT r FROM RegistroActividad r WHERE r.registroActividadPK.tipo = :tipo"),
     @NamedQuery(name = "RegistroActividad.findByEstadoInicial", query = "SELECT r FROM RegistroActividad r WHERE r.estadoInicial = :estadoInicial"),
     @NamedQuery(name = "RegistroActividad.findByEstadoFinal", query = "SELECT r FROM RegistroActividad r WHERE r.estadoFinal = :estadoFinal"),
@@ -46,7 +46,7 @@ public class RegistroActividad implements Serializable {
     private ActividadPwa actividadPwa;
     @JoinColumn(name = "perfil_pwa_cedula", referencedColumnName = "cedula", insertable = false, updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private PerfilPwa perfilPwa;
+    private PwAProfile PwAProfile;
 
     public RegistroActividad() {
     }
@@ -61,8 +61,8 @@ public class RegistroActividad implements Serializable {
         this.estadoFinal = estadoFinal;
     }
 
-    public RegistroActividad(Date fecha, String perfilPwaCedula, String tipo, int actividadPwaId) {
-        this.registroActividadPK = new RegistroActividadPK(fecha, perfilPwaCedula, tipo, actividadPwaId);
+    public RegistroActividad(Date fecha, String PwAProfileCedula, String tipo, int actividadPwaId) {
+        this.registroActividadPK = new RegistroActividadPK(fecha, PwAProfileCedula, tipo, actividadPwaId);
     }
 
     public RegistroActividadPK getRegistroActividadPK() {
@@ -97,12 +97,12 @@ public class RegistroActividad implements Serializable {
         this.actividadPwa = actividadPwa;
     }
 
-    public PerfilPwa getPerfilPwa() {
-        return perfilPwa;
+    public PwAProfile getPwAProfile() {
+        return PwAProfile;
     }
 
-    public void setPerfilPwa(PerfilPwa perfilPwa) {
-        this.perfilPwa = perfilPwa;
+    public void setPwAProfile(PwAProfile PwAProfile) {
+        this.PwAProfile = PwAProfile;
     }
 
     @Override

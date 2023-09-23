@@ -34,7 +34,7 @@ import jakarta.persistence.TemporalType;
 
 @NamedQueries({
     @NamedQuery(name = "PwAExerciseProfile.findAll", query = "SELECT p FROM PwAExerciseProfile p"),
-    @NamedQuery(name = "PwAExerciseProfile.findByPerfilPwaCedula", query = "SELECT p FROM PwAExerciseProfile p WHERE p.perfilPwaCedula = :perfilPwaCedula"),
+    @NamedQuery(name = "PwAExerciseProfile.findByPwAProfileCedula", query = "SELECT p FROM PwAExerciseProfile p WHERE p.PwAProfileCedula = :PwAProfileCedula"),
     @NamedQuery(name = "PwAExerciseProfile.findByIndexIntensidadActual", query = "SELECT p FROM PwAExerciseProfile p WHERE p.indexIntensidadActual = :indexIntensidadActual"),
     @NamedQuery(name = "PwAExerciseProfile.findByFechaProx", query = "SELECT p FROM PwAExerciseProfile p WHERE p.fechaProx = :fechaProx"),
     @NamedQuery(name = "PwAExerciseProfile.findByHoraProx", query = "SELECT p FROM PwAExerciseProfile p WHERE p.horaProx = :horaProx"),
@@ -45,7 +45,7 @@ public class PwAExerciseProfile implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "perfil_pwa_cedula")
-    private String perfilPwaCedula;
+    private String PwAProfileCedula;
     @Basic(optional = false)
     @Column(name = "index_intensidad_actual")
     private int indexIntensidadActual;
@@ -65,7 +65,7 @@ public class PwAExerciseProfile implements Serializable {
     private List<Horario> horarioList;
     @JoinColumn(name = "perfil_pwa_cedula", referencedColumnName = "cedula", insertable = false, updatable = false)
     @OneToOne(optional = false, fetch = FetchType.EAGER)
-    private PerfilPwa perfilPwa;
+    private PwAProfile PwAProfile;
     @JoinColumn(name = "nombre_programa", referencedColumnName = "nombre")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private ProgramaEjercicio nombrePrograma;
@@ -75,24 +75,24 @@ public class PwAExerciseProfile implements Serializable {
     public PwAExerciseProfile() {
     }
 
-    public PwAExerciseProfile(String perfilPwaCedula) {
-        this.perfilPwaCedula = perfilPwaCedula;
+    public PwAExerciseProfile(String PwAProfileCedula) {
+        this.PwAProfileCedula = PwAProfileCedula;
     }
 
-    public PwAExerciseProfile(String perfilPwaCedula, int indexIntensidadActual, Date fechaProx, int horaProx, int diasHechos) {
-        this.perfilPwaCedula = perfilPwaCedula;
+    public PwAExerciseProfile(String PwAProfileCedula, int indexIntensidadActual, Date fechaProx, int horaProx, int diasHechos) {
+        this.PwAProfileCedula = PwAProfileCedula;
         this.indexIntensidadActual = indexIntensidadActual;
         this.fechaProx = fechaProx;
         this.horaProx = horaProx;
         this.diasHechos = diasHechos;
     }
 
-    public String getPerfilPwaCedula() {
-        return perfilPwaCedula;
+    public String getPwAProfileCedula() {
+        return PwAProfileCedula;
     }
 
-    public void setPerfilPwaCedula(String perfilPwaCedula) {
-        this.perfilPwaCedula = perfilPwaCedula;
+    public void setPwAProfileCedula(String PwAProfileCedula) {
+        this.PwAProfileCedula = PwAProfileCedula;
     }
 
     public int getIndexIntensidadActual() {
@@ -145,12 +145,12 @@ public class PwAExerciseProfile implements Serializable {
         this.horarioList = horarioList;
     }
 
-    public PerfilPwa getPerfilPwa() {
-        return perfilPwa;
+    public PwAProfile getPwAProfile() {
+        return PwAProfile;
     }
 
-    public void setPerfilPwa(PerfilPwa perfilPwa) {
-        this.perfilPwa = perfilPwa;
+    public void setPwAProfile(PwAProfile PwAProfile) {
+        this.PwAProfile = PwAProfile;
     }
 
     public ProgramaEjercicio getNombrePrograma() {
@@ -173,7 +173,7 @@ public class PwAExerciseProfile implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (perfilPwaCedula != null ? perfilPwaCedula.hashCode() : 0);
+        hash += (PwAProfileCedula != null ? PwAProfileCedula.hashCode() : 0);
         return hash;
     }
 

@@ -1,9 +1,9 @@
-package com.besa.PwAAgent.agent.goals;
+package com.besa.PwAAgent.agent.goals.action;
 
 import BESA.SocialRobot.BDIAgent.BeliefAgent.InteractionState.InteractionContext.ServiceContext;
 import rational.data.InfoData;
 
-public class PrepararEjercicioContext extends ServiceContext{
+public class ProgramarRutinaContext extends ServiceContext{
 
     @Override
     public boolean update(InfoData arg0) {

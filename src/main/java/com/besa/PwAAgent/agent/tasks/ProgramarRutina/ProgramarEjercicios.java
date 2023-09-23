@@ -37,7 +37,7 @@ public class ProgramarEjercicios extends SRTask {
     @Override
     public void executeTask(Believes parameters) {
         //BeliefAgent blvs = (BeliefAgent) parameters;
-        PwAExerciseProfile miPerfil = new PwAExerciseProfile();//TODO retrieve. RESPwABDInterface.getExcerciseProfile(blvs.getbPerfilPwA().getPerfil().getCedula());
+        PwAExerciseProfile miPerfil = new PwAExerciseProfile();//TODO retrieve. RESPwABDInterface.getExcerciseProfile(blvs.getbPwAProfile().getPerfil().getCedula());
         Date currDate = new Date();
         
         List<Ejercicio> listaEjercicio = miPerfil.getEjercicioList();

@@ -1,4 +1,4 @@
-package com.besa.PwAAgent.agent.goals;
+package com.besa.PwAAgent.agent.goals.action;
 
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
@@ -56,7 +56,7 @@ public class AsignarProgramaEjercicio extends ServiceGoal<AsignarProgramaEjercic
     public double detectGoal(Believes believes) throws KernellAgentEventExceptionBESA 
     {
         //BeliefAgent blvs = (BeliefAgent) believes;
-        //PerfilPwa miPerfil = blvs.getbPerfilPwA().getPerfil();
+        //PwAProfile miPerfil = blvs.getbPwAProfile().getPerfil();
         //if (miPerfil.getExerciseProfile() != null) return 0;
         return 1;
     }
@@ -73,7 +73,7 @@ public class AsignarProgramaEjercicio extends ServiceGoal<AsignarProgramaEjercic
     public boolean goalSucceeded(Believes believes) throws KernellAgentEventExceptionBESA 
     {
         //BeliefAgent blvs = (BeliefAgent) believes;
-        //PerfilPwa miPerfil = blvs.getbPerfilPwA().getPerfil();
+        //PwAProfile miPerfil = blvs.getbPwAProfile().getPerfil();
         //return miPerfil.getExerciseProfile() != null || blvs.getbEstadoInteraccion().getCancelarProgramacionEjercicio();
         return true;
     }

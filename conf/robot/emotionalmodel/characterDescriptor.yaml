@@ -1,0 +1,32 @@
+emotionalModelDescriptors:
+  - playerNames: [A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11]
+    personRelationships:
+      Mama: Cercano
+      Vecino: Enemigo
+      Transeunte: Desconocido
+    eventDesirabilities:
+      Morir: Indeseable
+      Ganar: Deseable
+      Perder: Algo Indeseable
+    objectRelationships:
+      Loteria: Valioso
+      Billetera: Importante
+      Mama: Importante
+    emotionalAxis:
+      - positiveName: Felicidad
+        negativeName: Tristeza
+        currentValue: 0.2
+        baseValue: 0
+        forgetFactor: 0.1
+        eventInfluences:
+          Morir: 1
+          Ganar: 0.8
+          Perder: 0.2
+      - positiveName: Tranquilidad
+        negativeName: Ira
+        currentValue: 0
+        baseValue: -0.2
+        forgetFactor: 0.1
+        eventInfluences:
+          Morir: 0.6
+          Perder: 0.7

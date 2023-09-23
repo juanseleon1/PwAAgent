@@ -1,5 +1,5 @@
 
-package com.besa.PwAAgent.agent.goals;
+package com.besa.PwAAgent.agent.goals.action;
 
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;

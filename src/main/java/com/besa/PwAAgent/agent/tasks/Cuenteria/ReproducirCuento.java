@@ -9,8 +9,9 @@ import BESA.SocialRobot.BDIAgent.BeliefAgent.PsychologicalState.AgentEmotionalSt
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.SRTask;
 import rational.mapping.Believes;
 import java.util.HashMap;
-import com.besa.PwAAgent.agent.goals.Cuenteria;
-import com.besa.PwAAgent.agent.goals.CuenteriaContext;
+
+import com.besa.PwAAgent.agent.goals.action.Cuenteria;
+import com.besa.PwAAgent.agent.goals.action.CuenteriaContext;
 import com.besa.PwAAgent.configuration.emotionalmodel.utils.EmotionalEventType;
 import com.besa.PwAAgent.configuration.emotionalmodel.utils.EmotionalObjectType;
 import com.besa.PwAAgent.configuration.emotionalmodel.utils.EmotionalSubjectType;

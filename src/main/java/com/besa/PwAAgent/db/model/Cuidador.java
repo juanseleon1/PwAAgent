@@ -4,7 +4,7 @@ package com.besa.PwAAgent.db.model;
 import java.io.Serializable;
 import java.util.List;
 
-import com.besa.PwAAgent.db.model.userprofile.PerfilPwa;
+import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
@@ -49,7 +49,7 @@ public class Cuidador implements Serializable {
     @Column(name = "celular")
     private String celular;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuidadorNombreUsuario", fetch = FetchType.EAGER)
-    private List<PerfilPwa> perfilPwaList;
+    private List<PwAProfile> PwAProfileList;
 
     public Cuidador() {
     }
@@ -107,12 +107,12 @@ public class Cuidador implements Serializable {
     }
 
     
-    public List<PerfilPwa> getPerfilPwaList() {
-        return perfilPwaList;
+    public List<PwAProfile> getPwAProfileList() {
+        return PwAProfileList;
     }
 
-    public void setPerfilPwaList(List<PerfilPwa> perfilPwaList) {
-        this.perfilPwaList = perfilPwaList;
+    public void setPwAProfileList(List<PwAProfile> PwAProfileList) {
+        this.PwAProfileList = PwAProfileList;
     }
 
     @Override

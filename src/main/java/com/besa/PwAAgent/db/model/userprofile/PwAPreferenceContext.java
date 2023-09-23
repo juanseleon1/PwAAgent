@@ -30,7 +30,7 @@ import jakarta.persistence.Table;
 
 @NamedQueries({
     @NamedQuery(name = "PwAPreferenceContext.findAll", query = "SELECT p FROM PwAPreferenceContext p"),
-    @NamedQuery(name = "PwAPreferenceContext.findByPerfilPwaCedula", query = "SELECT p FROM PwAPreferenceContext p WHERE p.perfilPwaCedula = :perfilPwaCedula"),
+    @NamedQuery(name = "PwAPreferenceContext.findByPwAProfileCedula", query = "SELECT p FROM PwAPreferenceContext p WHERE p.PwAProfileCedula = :PwAProfileCedula"),
     @NamedQuery(name = "PwAPreferenceContext.findByNombrePreferido", query = "SELECT p FROM PwAPreferenceContext p WHERE p.nombrePreferido = :nombrePreferido"),
     @NamedQuery(name = "PwAPreferenceContext.findByGustoKaraoke", query = "SELECT p FROM PwAPreferenceContext p WHERE p.gustoKaraoke = :gustoKaraoke"),
     @NamedQuery(name = "PwAPreferenceContext.findByGustoMusica", query = "SELECT p FROM PwAPreferenceContext p WHERE p.gustoMusica = :gustoMusica"),
@@ -43,7 +43,7 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
     @Id
     @Basic(optional = false)
     @Column(name = "perfil_pwa_cedula")
-    private String perfilPwaCedula;
+    private String PwAProfileCedula;
     @Basic(optional = false)
     @Column(name = "nombre_preferido")
     private String nombrePreferido;
@@ -66,7 +66,7 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
     private List<PreferenciaXCuento> preferenciaXCuentoList;
     @JoinColumn(name = "perfil_pwa_cedula", referencedColumnName = "cedula", insertable = false, updatable = false)
     @OneToOne(optional = false, fetch = FetchType.EAGER)
-    private PerfilPwa perfilPwa;
+    private PwAProfile PwAProfile;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pwaPreferenceContext", fetch = FetchType.EAGER)
     private List<ActXPreferencia> actXPreferenciaList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pwaPreferenceContext", fetch = FetchType.EAGER)
@@ -77,12 +77,12 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
     public PwAPreferenceContext() {
     }
 
-    public PwAPreferenceContext(String perfilPwaCedula) {
-        this.perfilPwaCedula = perfilPwaCedula;
+    public PwAPreferenceContext(String PwAProfileCedula) {
+        this.PwAProfileCedula = PwAProfileCedula;
     }
 
-    public PwAPreferenceContext(String perfilPwaCedula, String nombrePreferido, double gustoKaraoke, double gustoMusica, double gustoBaile, int brilloPreferido, int volPreferido) {
-        this.perfilPwaCedula = perfilPwaCedula;
+    public PwAPreferenceContext(String PwAProfileCedula, String nombrePreferido, double gustoKaraoke, double gustoMusica, double gustoBaile, int brilloPreferido, int volPreferido) {
+        this.PwAProfileCedula = PwAProfileCedula;
         this.nombrePreferido = nombrePreferido;
         this.gustoKaraoke = gustoKaraoke;
         this.gustoMusica = gustoMusica;
@@ -91,12 +91,12 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
         this.volPreferido = volPreferido;
     }
 
-    public String getPerfilPwaCedula() {
-        return perfilPwaCedula;
+    public String getPwAProfileCedula() {
+        return PwAProfileCedula;
     }
 
-    public void setPerfilPwaCedula(String perfilPwaCedula) {
-        this.perfilPwaCedula = perfilPwaCedula;
+    public void setPwAProfileCedula(String PwAProfileCedula) {
+        this.PwAProfileCedula = PwAProfileCedula;
     }
 
     public String getNombrePreferido() {
@@ -156,12 +156,12 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
         this.preferenciaXCuentoList = preferenciaXCuentoList;
     }
 
-    public PerfilPwa getPerfilPwa() {
-        return perfilPwa;
+    public PwAProfile getPwAProfile() {
+        return PwAProfile;
     }
 
-    public void setPerfilPwa(PerfilPwa perfilPwa) {
-        this.perfilPwa = perfilPwa;
+    public void setPwAProfile(PwAProfile PwAProfile) {
+        this.PwAProfile = PwAProfile;
     }
 
     
@@ -194,7 +194,7 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (perfilPwaCedula != null ? perfilPwaCedula.hashCode() : 0);
+        hash += (PwAProfileCedula != null ? PwAProfileCedula.hashCode() : 0);
         return hash;
     }
 

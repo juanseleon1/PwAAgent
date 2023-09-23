@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import com.besa.PwAAgent.db.model.userprofile.PerfilPwa;
+import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -59,7 +59,7 @@ public class Familiar implements Serializable {
         @JoinColumn(name = "familiar_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "perfil_pwa_cedula", referencedColumnName = "cedula")})
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<PerfilPwa> perfilPwaList;
+    private List<PwAProfile> PwAProfileList;
 
     public Familiar() {
     }
@@ -123,12 +123,12 @@ public class Familiar implements Serializable {
     }
 
     
-    public List<PerfilPwa> getPerfilPwaList() {
-        return perfilPwaList;
+    public List<PwAProfile> getPwAProfileList() {
+        return PwAProfileList;
     }
 
-    public void setPerfilPwaList(List<PerfilPwa> perfilPwaList) {
-        this.perfilPwaList = perfilPwaList;
+    public void setPwAProfileList(List<PwAProfile> PwAProfileList) {
+        this.PwAProfileList = PwAProfileList;
     }
 
     @Override

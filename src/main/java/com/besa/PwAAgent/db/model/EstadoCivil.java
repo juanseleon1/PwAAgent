@@ -4,7 +4,7 @@ package com.besa.PwAAgent.db.model;
 import java.io.Serializable;
 import java.util.List;
 
-import com.besa.PwAAgent.db.model.userprofile.PerfilPwa;
+import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
@@ -33,7 +33,7 @@ public class EstadoCivil implements Serializable {
     @Column(name = "tipo_ec")
     private String tipoEc;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoCivilTipoEc", fetch = FetchType.EAGER)
-    private List<PerfilPwa> perfilPwaList;
+    private List<PwAProfile> PwAProfileList;
 
     public EstadoCivil() {
     }
@@ -51,12 +51,12 @@ public class EstadoCivil implements Serializable {
     }
 
     
-    public List<PerfilPwa> getPerfilPwaList() {
-        return perfilPwaList;
+    public List<PwAProfile> getPwAProfileList() {
+        return PwAProfileList;
     }
 
-    public void setPerfilPwaList(List<PerfilPwa> perfilPwaList) {
-        this.perfilPwaList = perfilPwaList;
+    public void setPwAProfileList(List<PwAProfile> PwAProfileList) {
+        this.PwAProfileList = PwAProfileList;
     }
 
     @Override
