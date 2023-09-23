@@ -1,29 +1,25 @@
 package com.besa.PwAAgent.agent.tasks.Retroalimentacion;
 
 import rational.mapping.Believes;
-import java.util.HashMap;
-import com.besa.PwAAgent.agent.goals.MusicoTerapia;
-import com.besa.PwAAgent.agent.goals.MusicoTerapiaContext;
-import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.SRTask;
 
 
 public class RecibirRetroalimentacionEjercicio extends SRTask {
 
-    private HashMap<String, Object> infoServicio = new HashMap<>();
-    private int num;
+    //private HashMap<String, Object> infoServicio = new HashMap<>();
+    //private int num;
 
     public RecibirRetroalimentacionEjercicio() {
 
-        num = 0;
+        //num = 0;
 //        System.out.println("--- Task Recibir Retroalimentacion Iniciada ---"); TODO
     }
 
     @Override
     public void executeTask(Believes parameters) {
         System.out.println("--- Execute Task Recibir Retroalimentacion ---");
-        BeliefAgent blvs = (BeliefAgent) parameters;
-                MusicoTerapiaContext musicoTerapiaContext = (MusicoTerapiaContext) blvs.getServiceContext(MusicoTerapia.class);
+        //BeliefAgent blvs = (BeliefAgent) parameters;
+                //MusicoTerapiaContext musicoTerapiaContext = (MusicoTerapiaContext) blvs.getServiceContext(MusicoTerapia.class);
 
         //if (blvs.getbEstadoInteraccion().getRetroalimentacionValue() == null) {
         //    System.out.println("No tengo mis respuestas!...");
@@ -64,18 +60,18 @@ public class RecibirRetroalimentacionEjercicio extends SRTask {
 
     }
 
-    private int CheckRetroValue(String frase) {
-        switch (frase.toLowerCase()) {
-            case "uno":
-                return 1;
-            case "dos":
-                return 2;
-            case "tres":
-                return 3;
-            default:
-                return 0;
-        }
-    }
+    //private int CheckRetroValue(String frase) {
+    //    switch (frase.toLowerCase()) {
+    //        case "uno":
+    //            return 1;
+    //        case "dos":
+    //            return 2;
+    //        case "tres":
+    //            return 3;
+    //        default:
+    //            return 0;
+    //    }
+    //}
 
     @Override
     public void interruptTask(Believes believes) {
@@ -92,7 +88,7 @@ public class RecibirRetroalimentacionEjercicio extends SRTask {
     @Override
     public boolean checkFinish(Believes believes) {
         System.out.println("Chequee finish - RecibirRetroEjercicio");
-        BeliefAgent blvs = (BeliefAgent) believes;
+        //BeliefAgent blvs = (BeliefAgent) believes;
         //System.out.println("¿Está mi tópico de retro activo? " + blvs.getbEstadoInteraccion().isTopicoActivo(PepperTopicsNames.RETROEJERTOPIC));
         //if (!blvs.getbEstadoInteraccion().isTopicoActivo(PepperTopicsNames.RETROEJERTOPIC) && blvs.getbEstadoInteraccion().getRetroalimentacionValue() != null) {
         //    blvs.getbEstadoInteraccion().setRetroalimentacionValue(null);

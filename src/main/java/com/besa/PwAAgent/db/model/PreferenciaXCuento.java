@@ -39,7 +39,7 @@ public class PreferenciaXCuento implements Serializable {
     private Cuento cuento;
     @JoinColumn(name = "preferencia_pwa_cedula", referencedColumnName = "perfil_pwa_cedula", insertable = false, updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private PwAPreferenceContext PwAPreferenceContext;
+    private PwAPreferenceContext pwaPreferenceContext;
 
     public PreferenciaXCuento() {
     }
@@ -82,11 +82,11 @@ public class PreferenciaXCuento implements Serializable {
     }
 
     public PwAPreferenceContext getPwAPreferenceContext() {
-        return PwAPreferenceContext;
+        return pwaPreferenceContext;
     }
 
-    public void setPwAPreferenceContext(PwAPreferenceContext PwAPreferenceContext) {
-        this.PwAPreferenceContext = PwAPreferenceContext;
+    public void setPwAPreferenceContext(PwAPreferenceContext pwaPreferenceContext) {
+        this.pwaPreferenceContext = pwaPreferenceContext;
     }
 
     @Override
@@ -95,23 +95,4 @@ public class PreferenciaXCuento implements Serializable {
         hash += (preferenciaXCuentoPK != null ? preferenciaXCuentoPK.hashCode() : 0);
         return hash;
     }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PreferenciaXCuento)) {
-            return false;
-        }
-        PreferenciaXCuento other = (PreferenciaXCuento) object;
-        if ((this.preferenciaXCuentoPK == null && other.preferenciaXCuentoPK != null) || (this.preferenciaXCuentoPK != null && !this.preferenciaXCuentoPK.equals(other.preferenciaXCuentoPK))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BESA.PwARobot.DBConnection.SREntities.PreferenciaXCuento[ preferenciaXCuentoPK=" + preferenciaXCuentoPK + " ]";
-    }
-    
 }

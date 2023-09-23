@@ -177,22 +177,4 @@ public class PwAExerciseProfile implements Serializable {
         return hash;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PwAExerciseProfile)) {
-            return false;
-        }
-        PwAExerciseProfile other = (PwAExerciseProfile) object;
-        if ((this.perfilPwaCedula == null && other.perfilPwaCedula != null) || (this.perfilPwaCedula != null && !this.perfilPwaCedula.equals(other.perfilPwaCedula))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BESA.PwARobot.DBConnection.SREntities.PwAExerciseProfile[ perfilPwaCedula=" + perfilPwaCedula + " ]";
-    }
-    
 }

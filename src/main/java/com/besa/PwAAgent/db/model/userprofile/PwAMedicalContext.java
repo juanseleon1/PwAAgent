@@ -221,22 +221,4 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
         return hash;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PwAMedicalContext)) {
-            return false;
-        }
-        PwAMedicalContext other = (PwAMedicalContext) object;
-        if ((this.perfilPwaCedula == null && other.perfilPwaCedula != null) || (this.perfilPwaCedula != null && !this.perfilPwaCedula.equals(other.perfilPwaCedula))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BESA.PwARobot.DBConnection.SREntities.PwAMedicalContext[ perfilPwaCedula=" + perfilPwaCedula + " ]";
-    }
-    
 }

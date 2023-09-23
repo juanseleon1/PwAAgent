@@ -84,28 +84,6 @@ public class RegistroActividadPK implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RegistroActividadPK)) {
-            return false;
-        }
-        RegistroActividadPK other = (RegistroActividadPK) object;
-        if ((this.fecha == null && other.fecha != null) || (this.fecha != null && !this.fecha.equals(other.fecha))) {
-            return false;
-        }
-        if ((this.perfilPwaCedula == null && other.perfilPwaCedula != null) || (this.perfilPwaCedula != null && !this.perfilPwaCedula.equals(other.perfilPwaCedula))) {
-            return false;
-        }
-        if ((this.tipo == null && other.tipo != null) || (this.tipo != null && !this.tipo.equals(other.tipo))) {
-            return false;
-        }
-        if (this.actividadPwaId != other.actividadPwaId) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public String toString() {
         return "BESA.PwARobot.DBConnection.SREntities.RegistroActividadPK[ fecha=" + fecha + ", perfilPwaCedula=" + perfilPwaCedula + ", tipo=" + tipo + ", actividadPwaId=" + actividadPwaId + " ]";
     }

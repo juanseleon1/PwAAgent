@@ -39,7 +39,7 @@ public class PreferenciaXBaile implements Serializable {
     private Baile baile;
     @JoinColumn(name = "preferencia_pwa_cedula", referencedColumnName = "perfil_pwa_cedula", insertable = false, updatable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private PwAPreferenceContext PwAPreferenceContext;
+    private PwAPreferenceContext pwaPreferenceContext;
 
     public PreferenciaXBaile() {
     }
@@ -82,11 +82,11 @@ public class PreferenciaXBaile implements Serializable {
     }
 
     public PwAPreferenceContext getPwAPreferenceContext() {
-        return PwAPreferenceContext;
+        return pwaPreferenceContext;
     }
 
-    public void setPwAPreferenceContext(PwAPreferenceContext PwAPreferenceContext) {
-        this.PwAPreferenceContext = PwAPreferenceContext;
+    public void setPwAPreferenceContext(PwAPreferenceContext pwaPreferenceContext) {
+        this.pwaPreferenceContext = pwaPreferenceContext;
     }
 
     @Override
@@ -98,7 +98,7 @@ public class PreferenciaXBaile implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        
         if (!(object instanceof PreferenciaXBaile)) {
             return false;
         }

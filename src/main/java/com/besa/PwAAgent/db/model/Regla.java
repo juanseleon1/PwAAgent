@@ -92,22 +92,4 @@ public class Regla implements Serializable {
         return hash;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Regla)) {
-            return false;
-        }
-        Regla other = (Regla) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BESA.PwARobot.DBConnection.SREntities.Regla[ id=" + id + " ]";
-    }
-    
 }

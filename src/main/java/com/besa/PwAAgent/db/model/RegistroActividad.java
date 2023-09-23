@@ -111,23 +111,4 @@ public class RegistroActividad implements Serializable {
         hash += (registroActividadPK != null ? registroActividadPK.hashCode() : 0);
         return hash;
     }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof RegistroActividad)) {
-            return false;
-        }
-        RegistroActividad other = (RegistroActividad) object;
-        if ((this.registroActividadPK == null && other.registroActividadPK != null) || (this.registroActividadPK != null && !this.registroActividadPK.equals(other.registroActividadPK))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BESA.PwARobot.DBConnection.SREntities.RegistroActividad[ registroActividadPK=" + registroActividadPK + " ]";
-    }
-    
 }

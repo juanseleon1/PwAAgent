@@ -248,22 +248,4 @@ public class PerfilPwa implements Serializable {
         return hash;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PerfilPwa)) {
-            return false;
-        }
-        PerfilPwa other = (PerfilPwa) object;
-        if ((this.cedula == null && other.cedula != null) || (this.cedula != null && !this.cedula.equals(other.cedula))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BESA.PwARobot.DBConnection.SREntities.PerfilPwa[ cedula=" + cedula + " ]";
-    }
-    
 }

@@ -49,25 +49,4 @@ public class PreferenciaXBailePK implements Serializable {
         return hash;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PreferenciaXBailePK)) {
-            return false;
-        }
-        PreferenciaXBailePK other = (PreferenciaXBailePK) object;
-        if (this.baileId != other.baileId) {
-            return false;
-        }
-        if ((this.preferenciaPwaCedula == null && other.preferenciaPwaCedula != null) || (this.preferenciaPwaCedula != null && !this.preferenciaPwaCedula.equals(other.preferenciaPwaCedula))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BESA.PwARobot.DBConnection.SREntities.PreferenciaXBailePK[ baileId=" + baileId + ", preferenciaPwaCedula=" + preferenciaPwaCedula + " ]";
-    }
-    
 }

@@ -62,16 +62,16 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
     @Basic(optional = false)
     @Column(name = "vol_preferido")
     private int volPreferido;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "PwAPreferenceContext", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pwaPreferenceContext", fetch = FetchType.EAGER)
     private List<PreferenciaXCuento> preferenciaXCuentoList;
     @JoinColumn(name = "perfil_pwa_cedula", referencedColumnName = "cedula", insertable = false, updatable = false)
     @OneToOne(optional = false, fetch = FetchType.EAGER)
     private PerfilPwa perfilPwa;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "PwAPreferenceContext", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pwaPreferenceContext", fetch = FetchType.EAGER)
     private List<ActXPreferencia> actXPreferenciaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "PwAPreferenceContext", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pwaPreferenceContext", fetch = FetchType.EAGER)
     private List<PreferenciaXBaile> preferenciaXBaileList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "PwAPreferenceContext", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pwaPreferenceContext", fetch = FetchType.EAGER)
     private List<PreferenciaXCancion> preferenciaXCancionList;
 
     public PwAPreferenceContext() {
@@ -198,22 +198,4 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
         return hash;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PwAPreferenceContext)) {
-            return false;
-        }
-        PwAPreferenceContext other = (PwAPreferenceContext) object;
-        if ((this.perfilPwaCedula == null && other.perfilPwaCedula != null) || (this.perfilPwaCedula != null && !this.perfilPwaCedula.equals(other.perfilPwaCedula))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BESA.PwARobot.DBConnection.SREntities.PwAPreferenceContext[ perfilPwaCedula=" + perfilPwaCedula + " ]";
-    }
-    
 }

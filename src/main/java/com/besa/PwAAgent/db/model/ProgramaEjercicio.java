@@ -89,22 +89,4 @@ public class ProgramaEjercicio implements Serializable {
         return hash;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ProgramaEjercicio)) {
-            return false;
-        }
-        ProgramaEjercicio other = (ProgramaEjercicio) object;
-        if ((this.nombre == null && other.nombre != null) || (this.nombre != null && !this.nombre.equals(other.nombre))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BESA.PwARobot.DBConnection.SREntities.ProgramaEjercicio[ nombre=" + nombre + " ]";
-    }
-    
 }
