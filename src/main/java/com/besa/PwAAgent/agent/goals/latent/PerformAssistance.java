@@ -6,9 +6,9 @@ import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.MotivationAgent;
 import rational.mapping.Believes;
 
-public class GenerateWellBeing extends LatentGoal {
+public class PerformAssistance extends LatentGoal {
 
-    public GenerateWellBeing() {
+    public PerformAssistance() {
         super(MotivationAgent.getPlanID());
     }
 
