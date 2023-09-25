@@ -25,8 +25,9 @@ public class SeleccionarCuento extends SRTask {
     @Override
     public void executeTask(Believes parameters) {
         System.out.println("--- Execute Task Recomendar Cuento ---");
-
         BeliefAgent blvs = (BeliefAgent) parameters;
+        blvs.getInteractionState().setActiveService(Cuenteria.class.getName());
+
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile)blvs.getUserProfile(currUser);
         userName =  miPerfil.getUserContext().getSocioDemoContext().getName();

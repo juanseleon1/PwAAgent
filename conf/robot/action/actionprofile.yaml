@@ -1,0 +1,31 @@
+actions:
+  Action1:
+      name: "Action1"
+      primitives:
+        - name: "Primitive1"
+          parameters:
+            - name: "Parameter1"
+              config:
+                key1: "value1"
+                key2: "value2"
+            - name: "Parameter2"
+              config:
+                key3: "value3"
+        - name: "Primitive2"
+          parameters:
+            - name: "Parameter3"
+              config:
+                key4: "value4"
+  Action2:
+      name: "Action2"
+      primitives:
+        - name: "Primitive3"
+          parameters:
+            - name: "Parameter4"
+              config:
+                key5: "value5"
+        - name: "Primitive4"
+          parameters:
+            - name: "Parameter5"
+              config:
+                key6: "value6"

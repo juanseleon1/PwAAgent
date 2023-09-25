@@ -251,8 +251,7 @@ public class PwAProfile extends UserProfile implements Serializable {
     }
 
       @Override
-    public boolean update(InfoData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public boolean update(InfoData data) {
+        return false;
     }
 }

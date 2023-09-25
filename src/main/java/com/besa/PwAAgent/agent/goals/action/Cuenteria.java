@@ -93,6 +93,7 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
     @Override
     public double evaluateContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA {
         // System.out.println("Meta Cuenteria evaluateContribution");
+        // TODO Auto-generated method stub
         BeliefAgent blvs = (BeliefAgent) stateBDI.getBelieves();
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
@@ -113,12 +114,16 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
     @Override
     public boolean predictResultUnlegality(StateBDI agentStatus) throws KernellAgentEventExceptionBESA {
         // System.out.println("Meta Cuenteria predictResultUnlegability");
+                // TODO Auto-generated method stub
+
         return true;
     }
 
     @Override
     public boolean goalSucceeded(Believes believes) throws KernellAgentEventExceptionBESA {
         // System.out.println("Meta Cuenteria evaluateViability");
+                // TODO Auto-generated method stub
+
         BeliefAgent blvs = (BeliefAgent) believes;
                 String currUser = blvs.getActiveUsers().get(0);
 

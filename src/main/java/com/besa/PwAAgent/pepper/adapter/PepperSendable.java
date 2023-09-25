@@ -7,12 +7,12 @@ import java.util.Map;
 @JsonPropertyOrder({ "id", "proxyName", "methodName", "params" })
 public class PepperSendable implements Serializable {
 
-    private int id;
+    private double id;
     private String proxyName;
     private String methodName;
     private Map<String, ?> params;
 
-    public PepperSendable(int id, String proxyName, String methodName, Map<String, ?> params) {
+    public PepperSendable(double id, String proxyName, String methodName, Map<String, ?> params) {
         this.proxyName = proxyName;
         this.methodName = methodName;
         this.id = id;
@@ -27,11 +27,11 @@ public class PepperSendable implements Serializable {
         this.methodName = methodName;
     }
 
-    public int getId() {
+    public double getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(double id) {
         this.id = id;
     }
 

@@ -25,9 +25,11 @@ public class SeleccionarCancion extends SRTask {
 
     @Override
     public void executeTask(Believes parameters) {
+        BeliefAgent blvs = (BeliefAgent) parameters;
+        blvs.getInteractionState().setActiveService(MusicoTerapia.class.getName());
+
         System.out.println("--- Execute Task Seleccionar Cancion ---");
 
-        BeliefAgent blvs = (BeliefAgent) parameters;
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
         userName = miPerfil.getUserContext().getSocioDemoContext().getName();
@@ -42,10 +44,8 @@ public class SeleccionarCancion extends SRTask {
         CromosomaCancion cromosoma = null;
         cromosoma = (CromosomaCancion) modeloCancion.selectCromosoma();
 
-        if (cromosoma != null) {
-            cancionSelected = cromosoma.getCancion();
-            musicoterapiaContext.setCancionActual(cancionSelected);
-        }
+        cancionSelected = cromosoma.getCancion();
+        musicoterapiaContext.setCancionActual(cancionSelected);
 
         infoServicio = new HashMap<>();
         infoServicio.put("content", "La canción seleccionada es " + cancionSelected.getCancion().getNombre());

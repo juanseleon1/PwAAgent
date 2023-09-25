@@ -8,26 +8,22 @@ import BESA.SocialRobot.agentUtils.ServiceDataRequest;
 public class PepperMessageServiceConfig extends MessageServiceConfig{
 
     @Override
-    public DataBESA translateOtherActionsToDataBesa(RobotData arg0) {
-        // TODO Auto-generated method stub
+    public DataBESA translateOtherActionsToDataBesa(RobotData data) {
         throw new UnsupportedOperationException("Unimplemented method 'translateOtherActionsToDataBesa'");
     }
 
     @Override
-    public RobotData translateOtherActionsToRobotData(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
+    public RobotData translateOtherActionsToRobotData(ServiceDataRequest data) {
         throw new UnsupportedOperationException("Unimplemented method 'translateOtherActionsToRobotData'");
     }
 
     @Override
-    public RobotData translateSendMessageAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
+    public RobotData translateSendMessageAction(ServiceDataRequest data) {
         throw new UnsupportedOperationException("Unimplemented method 'translateSendMessageAction'");
     }
 
     @Override
-    public DataBESA translateSendMessageResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
+    public DataBESA translateSendMessageResponse(RobotData data) {
         throw new UnsupportedOperationException("Unimplemented method 'translateSendMessageResponse'");
     }
 

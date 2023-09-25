@@ -6,7 +6,7 @@ import BESA.SocialRobot.ServiceProvider.agent.adapter.SRAdapter;
 public class MessageAdapter extends SRAdapter{
 
     @Override
-    public void sendRequest(RobotData arg0) {
+    public void sendRequest(RobotData data) {
         // TODO Auto-generated method stub
     }
 

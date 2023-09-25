@@ -44,17 +44,21 @@ public class AsignarProgramaEjercicio extends ServiceGoal<AsignarProgramaEjercic
     }
     @Override
     public double evaluateViability(Believes believes) throws KernellAgentEventExceptionBESA 
-    {
+    {           // TODO Auto-generated method stub
+
         return 1;
     }
     @Override
     public double evaluatePlausibility(Believes believes) throws KernellAgentEventExceptionBESA {
+                // TODO Auto-generated method stub
+
         //System.out.println("Meta MantenerAtencionPwA evaluatePlausibility");
         return 1;
     }
     @Override
     public double detectGoal(Believes believes) throws KernellAgentEventExceptionBESA 
-    {
+    {           // TODO Auto-generated method stub
+
         //BeliefAgent blvs = (BeliefAgent) believes;
         //PwAProfile miPerfil = blvs.getbPwAProfile().getPerfil();
         //if (miPerfil.getExerciseProfile() != null) return 0;
@@ -72,6 +76,7 @@ public class AsignarProgramaEjercicio extends ServiceGoal<AsignarProgramaEjercic
     @Override
     public boolean goalSucceeded(Believes believes) throws KernellAgentEventExceptionBESA 
     {
+        // TODO Auto-generated method stub
         //BeliefAgent blvs = (BeliefAgent) believes;
         //PwAProfile miPerfil = blvs.getbPwAProfile().getPerfil();
         //return miPerfil.getExerciseProfile() != null || blvs.getbEstadoInteraccion().getCancelarProgramacionEjercicio();

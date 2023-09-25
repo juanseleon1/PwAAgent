@@ -7,12 +7,10 @@ public class MailAdapter extends SRAdapter{
 
     @Override
     public void sendRequest(RobotData arg0) {
-        // TODO Auto-generated method stub
     }
 
     @Override
     public void setup() {
-        // TODO Auto-generated method stub
     }
 
 }

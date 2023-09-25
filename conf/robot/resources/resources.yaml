@@ -1,0 +1,19 @@
+resources:
+  - id: 0  # Sample ID for the first resource
+    name: ExampleResource1  # Sample name for the first resource
+    parameters:
+      parameter1:
+        key1: value1
+        key2: value2
+      parameter2:
+        key3: value3
+        key4: value4
+  - id: 1  # Sample ID for the second resource
+    name: ExampleResource2  # Sample name for the second resource
+    parameters:
+      parameter1:
+        key1: value1
+        key2: value2
+      parameter2:
+        key3: value3
+        key4: value4

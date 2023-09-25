@@ -7,8 +7,7 @@ public class PwAConversationManagerBuilder implements ConversationManagerBuilder
 
     @Override
     public ConversationManager buildConversationManager() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'buildConversationManager'");
+        return new PwAConversationManager();
     }
 
 }

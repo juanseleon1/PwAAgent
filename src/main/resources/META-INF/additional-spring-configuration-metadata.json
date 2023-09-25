@@ -8,5 +8,25 @@
     "name": "robot.port",
     "type": "java.lang.String",
     "description": "A description for 'robot.port'"
+  },
+  {
+    "name": "robot.resourcePath",
+    "type": "java.lang.String",
+    "description": "A description for 'robot.resourcePath'"
+  },
+  {
+    "name": "robot.charPath",
+    "type": "java.lang.String",
+    "description": "A description for 'robot.charPath'"
+  },
+  {
+    "name": "robot.semanticPath",
+    "type": "java.lang.String",
+    "description": "A description for 'robot.semanticPath'"
+  },
+  {
+    "name": "robot.profilePath",
+    "type": "java.lang.String",
+    "description": "A description for 'robot.profilePath'"
   }
 ]}

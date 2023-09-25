@@ -8,81 +8,73 @@ import BESA.SocialRobot.agentUtils.ServiceDataRequest;
 public class PepperRobotResourceServiceConfig extends ResourceServiceConfig{
 
     @Override
-    public DataBESA translateOtherActionsToDataBesa(RobotData arg0) {
-        // TODO Auto-generated method stub
+    public DataBESA translateOtherActionsToDataBesa(RobotData data) {
         throw new UnsupportedOperationException("Unimplemented method 'translateOtherActionsToDataBesa'");
     }
 
     @Override
-    public RobotData translateOtherActionsToRobotData(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
+    public RobotData translateOtherActionsToRobotData(ServiceDataRequest data) {
         throw new UnsupportedOperationException("Unimplemented method 'translateOtherActionsToRobotData'");
     }
 
     @Override
-    public RobotData translateOtherCancelActionsToRobotData(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
+    public RobotData translateOtherCancelActionsToRobotData(ServiceDataRequest data) {
         throw new UnsupportedOperationException("Unimplemented method 'translateOtherCancelActionsToRobotData'");
     }
 
     @Override
-    public RobotData translateLedColorAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateLedColorAction'");
+    public RobotData translateLedColorAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "CHANGELEDCOLOR", data.getParams());
+
     }
 
     @Override
-    public DataBESA translateLedColorActionResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateLedColorActionResponse'");
+    public DataBESA translateLedColorActionResponse(RobotData data) {
+        return data;
     }
 
     @Override
-    public RobotData translateLedsOffAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateLedsOffAction'");
+    public RobotData translateLedsOffAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "LEDSOFF", data.getParams());
+
     }
 
     @Override
-    public DataBESA translateLedsOffActionResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateLedsOffActionResponse'");
+    public DataBESA translateLedsOffActionResponse(RobotData data) {
+        return data;
     }
 
     @Override
-    public RobotData translateLedsOnAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateLedsOnAction'");
+    public RobotData translateLedsOnAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "LEDSON", data.getParams());
+
     }
 
     @Override
-    public DataBESA translateLedsOnActionResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateLedsOnActionResponse'");
+    public DataBESA translateLedsOnActionResponse(RobotData data) {
+        return data;
     }
 
     @Override
-    public RobotData translateSuspendAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateSuspendAction'");
+    public RobotData translateSuspendAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "SUSPEND", data.getParams());
+
     }
 
     @Override
-    public DataBESA translateSuspendActionResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateSuspendActionResponse'");
+    public DataBESA translateSuspendActionResponse(RobotData data) {
+        return data;
     }
 
     @Override
-    public RobotData translateWakeUpAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateWakeUpAction'");
+    public RobotData translateWakeUpAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "WAKEUP", data.getParams());
+
     }
 
     @Override
-    public DataBESA translateWakeUpActionResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateWakeUpActionResponse'");
+    public DataBESA translateWakeUpActionResponse(RobotData data) {
+        return data;
     }
 
 }

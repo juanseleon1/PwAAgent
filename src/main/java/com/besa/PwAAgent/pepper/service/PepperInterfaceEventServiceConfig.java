@@ -1,6 +1,7 @@
 package com.besa.PwAAgent.pepper.service;
 
 import BESA.Kernel.Agent.Event.DataBESA;
+import BESA.SocialRobot.HumanCooperationAgent.guard.InteractionAnswerData;
 import BESA.SocialRobot.ServiceProvider.agent.adapter.RobotData;
 import BESA.SocialRobot.ServiceProvider.services.interfaces.interfaceevent.InterfaceEventServiceConfig;
 import BESA.SocialRobot.agentUtils.ServiceDataRequest;
@@ -8,135 +9,129 @@ import BESA.SocialRobot.agentUtils.ServiceDataRequest;
 public class PepperInterfaceEventServiceConfig extends InterfaceEventServiceConfig{
 
     @Override
-    public DataBESA translateOtherActionsToDataBesa(RobotData arg0) {
-        // TODO Auto-generated method stub
+    public DataBESA translateOtherActionsToDataBesa(RobotData data) {
         throw new UnsupportedOperationException("Unimplemented method 'translateOtherActionsToDataBesa'");
     }
 
     @Override
-    public RobotData translateOtherActionsToRobotData(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
+    public RobotData translateOtherActionsToRobotData(ServiceDataRequest data) {
         throw new UnsupportedOperationException("Unimplemented method 'translateOtherActionsToRobotData'");
     }
 
     @Override
-    public RobotData translateOtherCancelActionsToRobotData(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
+    public RobotData translateOtherCancelActionsToRobotData(ServiceDataRequest data) {
         throw new UnsupportedOperationException("Unimplemented method 'translateOtherCancelActionsToRobotData'");
     }
 
     @Override
-    protected DataBESA handleInterfaceEvent(RobotData arg0) {
-        // TODO Auto-generated method stub
+    protected InteractionAnswerData handleInterfaceEvent(RobotData data) {
         throw new UnsupportedOperationException("Unimplemented method 'handleInterfaceEvent'");
     }
 
     @Override
-    protected RobotData translateActivateInterfaceAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateActivateInterfaceAction'");
+    protected RobotData translateActivateInterfaceAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "WAKETABLET", data.getParams());
+
     }
 
     @Override
-    protected DataBESA translateActivateInterfaceResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateActivateInterfaceResponse'");
+    protected DataBESA translateActivateInterfaceResponse(RobotData data) {
+        return data;
     }
 
     @Override
-    protected RobotData translateChangeInterfacePropertiesAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateChangeInterfacePropertiesAction'");
+    protected RobotData translateChangeInterfacePropertiesAction(ServiceDataRequest data) {
+        String changeStr = (String) data.getParams().get("changeParam");
+        return new RobotData(data.getId(), data.getServiceName(), changeStr, data.getParams());
+
     }
 
     @Override
-    protected DataBESA translateChangeInterfacePropertiesResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateChangeInterfacePropertiesResponse'");
+    protected DataBESA translateChangeInterfacePropertiesResponse(RobotData data) {
+        return data;
     }
 
     @Override
-    protected RobotData translateDeactivateInterfaceAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateDeactivateInterfaceAction'");
+    protected RobotData translateDeactivateInterfaceAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "SUSPENDTABLET", data.getParams());
+
     }
 
     @Override
-    protected DataBESA translateDeactivateInterfaceResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateDeactivateInterfaceResponse'");
+    protected DataBESA translateDeactivateInterfaceResponse(RobotData data) {
+        return data;
     }
 
     @Override
-    protected RobotData translateHideImageAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateHideImageAction'");
+    protected RobotData translateHideImageAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "HIDEIMG", data.getParams());
+
     }
 
     @Override
-    protected DataBESA translateHideImageResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateHideImageResponse'");
+    protected DataBESA translateHideImageResponse(RobotData data) {
+        return data;
+
     }
 
     @Override
-    protected RobotData translatePauseVideoAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translatePauseVideoAction'");
+    protected RobotData translatePauseVideoAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "PAUSEVIDEO", data.getParams());
+
     }
 
     @Override
-    protected DataBESA translatePauseVideoResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translatePauseVideoResponse'");
+    protected DataBESA translatePauseVideoResponse(RobotData data) {
+        return data;
+
     }
 
     @Override
-    protected RobotData translateQuitVideoAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateQuitVideoAction'");
+    protected RobotData translateQuitVideoAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "QUITVIDEO", data.getParams());
+
     }
 
     @Override
-    protected DataBESA translateQuitVideoActionResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateQuitVideoActionResponse'");
+    protected DataBESA translateQuitVideoActionResponse(RobotData data) {
+        return data;
+
     }
 
     @Override
-    protected RobotData translateResumeVideoAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateResumeVideoAction'");
+    protected RobotData translateResumeVideoAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "RESUMEVIDEO", data.getParams());
+
     }
 
     @Override
-    protected DataBESA translateResumeVideoResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateResumeVideoResponse'");
+    protected DataBESA translateResumeVideoResponse(RobotData data) {
+        return data;
+
     }
 
     @Override
-    protected RobotData translateShowImageAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateShowImageAction'");
+    protected RobotData translateShowImageAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "SHOWIMG", data.getParams());
+
     }
 
     @Override
-    protected DataBESA translateShowImageResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateShowImageResponse'");
+    protected DataBESA translateShowImageResponse(RobotData data) {
+        return data;
+
     }
 
     @Override
-    protected RobotData translateShowVideoAction(ServiceDataRequest arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateShowVideoAction'");
+    protected RobotData translateShowVideoAction(ServiceDataRequest data) {
+        return new RobotData(data.getId(), data.getServiceName(), "SHOWVIDEO", data.getParams());
+
     }
 
     @Override
-    protected DataBESA translateShowVideoResponse(RobotData arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'translateShowVideoResponse'");
+    protected DataBESA translateShowVideoResponse(RobotData data) {
+        return data;
+
     }
 
 }

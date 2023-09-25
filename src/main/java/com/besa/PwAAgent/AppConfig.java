@@ -12,13 +12,10 @@ import org.springframework.core.env.Environment;
 
 import com.besa.PwAAgent.other.MailAdapter;
 import com.besa.PwAAgent.other.MessageAdapter;
-import com.besa.PwAAgent.pepper.action.PepperActionDescriptor;
-import com.besa.PwAAgent.pepper.action.PepperActionExecutor;
 import com.besa.PwAAgent.pepper.adapter.PepperAdapter;
 import com.besa.PwAAgent.pepper.adapter.PepperAdapterReceiver;
+import com.besa.PwAAgent.pepper.config.PepperConfigParser;
 import com.besa.PwAAgent.pepper.config.PepperInterfaceInterpreter;
-import com.besa.PwAAgent.pepper.config.PepperRobotResources;
-import com.besa.PwAAgent.pepper.emotion.PepperEmotionalConfig;
 import com.besa.PwAAgent.pepper.emotion.PepperEmotionalStrategy;
 import com.besa.PwAAgent.pepper.service.PepperEmotionExtractorServiceConfig;
 import com.besa.PwAAgent.pepper.service.PepperInterfaceEventServiceConfig;
@@ -34,11 +31,10 @@ import com.besa.PwAAgent.pwa.PwAEnrichmentStrategy;
 
 import BESA.BDI.AgentStructuralModel.Agent.LatentGoalStructure;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionAgentState;
-import BESA.SocialRobot.BDIAgent.ActionAgent.ActionExecutor.ActionDescriptor;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionExecutor.ActionExecutor;
+import BESA.SocialRobot.BDIAgent.ActionAgent.ActionExecutor.RobotActionProfile;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionModulator.ActionModulator;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionModulator.EnrichmentStrategy;
-import BESA.SocialRobot.BDIAgent.BeliefAgent.PhysicalState.InternalState.RobotEmotionalConfig;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.PhysicalState.InternalState.RobotResources;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.PsychologicalState.AgentEmotionalState.RobotEmotionalStrategy;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.utils.MotivationAgentConfiguration;
@@ -71,6 +67,11 @@ public class AppConfig {
                 SRConfiguration config = new SRConfiguration();
                 String robotIP = env.getProperty("robot.ip");
                 int robotPort = Integer.parseInt(env.getProperty("robot.port"));
+                String resourcePath = env.getProperty("robot.resourcePath");
+                String semanticPath = env.getProperty("robot.semanticPath");
+                String charPath = env.getProperty("robot.charPath");
+                String profilePath = env.getProperty("robot.profilePath");
+
 
                 PepperAdapter adapter = new PepperAdapter(robotIP, robotPort);
                 MailAdapter mailAdapter = new MailAdapter();
@@ -120,21 +121,19 @@ public class AppConfig {
                 MotivationAgentConfiguration motivationAgentConfiguration = new MotivationAgentConfiguration();
                 LatentGoalStructure latentGoalStructure = new LatentGoalStructure();
                 motivationAgentConfiguration.setGoalStructure(latentGoalStructure);
-                motivationAgentConfiguration.setSemanticDictPath("conf/robot/emotionalmodel/semanticDict.yaml");
-                motivationAgentConfiguration.setCharacterDescPath("conf/robot/emotionalmodel/characterDescriptor.yaml");
+                motivationAgentConfiguration.setSemanticDictPath(semanticPath);
+                motivationAgentConfiguration.setCharacterDescPath(charPath);
 
                 EnrichmentStrategy eas = new PwAEnrichmentStrategy();
-                ActionModulator actionModulator = new ActionModulator(eas);
+                
+                RobotActionProfile actionProfile = PepperConfigParser.parseRobotProfile(profilePath);
+                ActionModulator actionModulator = new ActionModulator(eas, actionProfile);
 
-                RobotResources robotResources = new PepperRobotResources();
+                RobotResources robotResources = PepperConfigParser.parseResources(resourcePath);
                 motivationAgentConfiguration.setRobotResources(robotResources);
-                RobotEmotionalConfig configDescriptor = new PepperEmotionalConfig();
                 RobotEmotionalStrategy emotionalStrategy = new PepperEmotionalStrategy();
-                motivationAgentConfiguration.setRobotEmotionalConfig(configDescriptor);
                 motivationAgentConfiguration.setRobotEmotionalStrategy(emotionalStrategy);
-                ActionDescriptor actionDescriptor = new PepperActionDescriptor();
-                ActionExecutor actionExecutor = new PepperActionExecutor(robotResources, configDescriptor,
-                                actionDescriptor);
+                ActionExecutor actionExecutor = new ActionExecutor(robotResources);
 
                 ActionAgentState actionState = new ActionAgentState(actionModulator, actionExecutor);
                 config.setConfig(motivationAgentConfiguration);
@@ -152,7 +151,7 @@ public class AppConfig {
 
                 config.setup();
                 config.start();
-                
+
                 return config;
         }
 }

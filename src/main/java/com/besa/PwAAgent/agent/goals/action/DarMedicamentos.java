@@ -1,18 +1,43 @@
 package com.besa.PwAAgent.agent.goals.action;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.besa.PwAAgent.agent.tasks.DarMedicamentos.EsperarConfirmacion;
+import com.besa.PwAAgent.agent.tasks.DarMedicamentos.RecordarSobreMedicamentos;
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
+import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.MotivationAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.ServiceGoal;
 import rational.RationalRole;
 import rational.mapping.Believes;
+import rational.mapping.Plan;
+import rational.mapping.Task;
 
 public class DarMedicamentos extends ServiceGoal<DarMedicamentosContext> {
+    private static String descrip = "Medicamentos";
 
-    public DarMedicamentos(long id, RationalRole role, String description, double accountability,
-            BeliefAgent beliefAgent, DarMedicamentosContext userContext) {
-        super(id, role, description, accountability, beliefAgent, userContext);
-        //TODO Auto-generated constructor stub
+    public static DarMedicamentos buildGoal(BeliefAgent beliefAgent) {
+        RecordarSobreMedicamentos retro = new RecordarSobreMedicamentos();
+        EsperarConfirmacion recomCuento = new EsperarConfirmacion();
+
+        List<Task> taskList;
+        Plan rolePlan = new Plan();
+
+        rolePlan.addTask(retro);
+
+        taskList = new ArrayList<>();
+        taskList.add(retro);
+        rolePlan.addTask(recomCuento, taskList);
+
+        RationalRole medicamentoRole = new RationalRole(descrip, rolePlan);
+        DarMedicamentos b = new DarMedicamentos(MotivationAgent.getPlanID(), medicamentoRole, beliefAgent);
+        return b;
+    }
+
+    public DarMedicamentos(int id, RationalRole role, BeliefAgent beliefAgent) {
+        super(id, role, descrip, 100, beliefAgent, new DarMedicamentosContext());
     }
 
     @Override
@@ -56,5 +81,5 @@ public class DarMedicamentos extends ServiceGoal<DarMedicamentosContext> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'calculateCriticality'");
     }
-    
+
 }

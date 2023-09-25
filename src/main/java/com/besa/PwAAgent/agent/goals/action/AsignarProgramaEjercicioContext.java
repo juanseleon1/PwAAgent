@@ -16,7 +16,7 @@ public class AsignarProgramaEjercicioContext extends ServiceContext{
     }
 
     @Override
-    public boolean update(InfoData arg0) {
+    public boolean update(InfoData data) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
