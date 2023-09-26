@@ -2,8 +2,11 @@ package com.besa.PwAAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +19,7 @@ import com.besa.PwAAgent.pepper.adapter.PepperAdapter;
 import com.besa.PwAAgent.pepper.adapter.PepperAdapterReceiver;
 import com.besa.PwAAgent.pepper.config.PepperConfigParser;
 import com.besa.PwAAgent.pepper.config.PepperInterfaceInterpreter;
+import com.besa.PwAAgent.pepper.config.PwAAgentConfiguration;
 import com.besa.PwAAgent.pepper.emotion.PepperEmotionalStrategy;
 import com.besa.PwAAgent.pepper.service.PepperEmotionExtractorServiceConfig;
 import com.besa.PwAAgent.pepper.service.PepperInterfaceEventServiceConfig;
@@ -27,9 +31,9 @@ import com.besa.PwAAgent.pepper.service.PepperRobotResourceServiceConfig;
 import com.besa.PwAAgent.pepper.service.PepperSentimentAnalysisServiceConfig;
 import com.besa.PwAAgent.pepper.service.PepperSpeechEngineServiceConfig;
 import com.besa.PwAAgent.pwa.PwAConversationManagerBuilder;
+import com.besa.PwAAgent.pwa.PwAEmotionalInterpreterState;
 import com.besa.PwAAgent.pwa.PwAEnrichmentStrategy;
 
-import BESA.BDI.AgentStructuralModel.Agent.LatentGoalStructure;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionAgentState;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionExecutor.ActionExecutor;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionExecutor.RobotActionProfile;
@@ -56,6 +60,8 @@ import BESA.SocialRobot.ServiceProvider.services.speech.sentimentanalysis.Sentim
 import BESA.SocialRobot.ServiceProvider.services.speech.speechengine.SpeechEngineService;
 import BESA.SocialRobot.UserEmotionalInterpreterAgent.agent.UserEmotionalInterpreterState;
 
+//TODO:  Load DB with data.  Hope for the best.
+
 @Configuration
 public class AppConfig {
 
@@ -64,20 +70,20 @@ public class AppConfig {
 
         @Bean
         SRConfiguration srConfiguration() {
-                SRConfiguration config = new SRConfiguration();
+                SRConfiguration config = new PwAAgentConfiguration();
                 String robotIP = env.getProperty("robot.ip");
                 int robotPort = Integer.parseInt(env.getProperty("robot.port"));
                 String resourcePath = env.getProperty("robot.resourcePath");
                 String semanticPath = env.getProperty("robot.semanticPath");
                 String charPath = env.getProperty("robot.charPath");
                 String profilePath = env.getProperty("robot.profilePath");
-
+                Set<Double> queries = new HashSet<>();
 
                 PepperAdapter adapter = new PepperAdapter(robotIP, robotPort);
                 MailAdapter mailAdapter = new MailAdapter();
-                MessageAdapter messageAdapter = new MessageAdapter();
+                Scanner scanner = new Scanner(System.in);
+                MessageAdapter messageAdapter = new MessageAdapter(scanner, queries);
                 int portNumber = 53152;
-
                 Map<String, List<SRService<?>>> serviceProviders = new HashMap<>();
                 List<SRService<?>> interfacesServices = new ArrayList<>();
                 interfacesServices.add(new InterfaceEventService(ServiceNames.INTERFACEEVENT, adapter,
@@ -86,7 +92,7 @@ public class AppConfig {
                                 new MailService(ServiceNames.MAIL, mailAdapter, new PepperAdapterReceiver(portNumber++),
                                                 new PepperMailServiceConfig()));
                 interfacesServices.add(new MessageService(ServiceNames.MESSAGE, messageAdapter,
-                                new PepperAdapterReceiver(portNumber++), new PepperMessageServiceConfig()));
+                                new PepperMessageAdapterReceiver(scanner, queries), new PepperMessageServiceConfig()));
                 serviceProviders.put("interfaces", interfacesServices);
 
                 List<SRService<?>> robotResourceServices = new ArrayList<>();
@@ -119,8 +125,6 @@ public class AppConfig {
                 config.setSps(serviceProviders);
 
                 MotivationAgentConfiguration motivationAgentConfiguration = new MotivationAgentConfiguration();
-                LatentGoalStructure latentGoalStructure = new LatentGoalStructure();
-                motivationAgentConfiguration.setGoalStructure(latentGoalStructure);
                 motivationAgentConfiguration.setSemanticDictPath(semanticPath);
                 motivationAgentConfiguration.setCharacterDescPath(charPath);
 
@@ -154,4 +158,5 @@ public class AppConfig {
 
                 return config;
         }
+
 }

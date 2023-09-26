@@ -12,7 +12,6 @@ public class RecibirRetroalimentacionEjercicio extends SRTask {
     public RecibirRetroalimentacionEjercicio() {
 
         //num = 0;
-//        System.out.println("--- Task Recibir Retroalimentacion Iniciada ---"); TODO
     }
 
     @Override

@@ -9,11 +9,13 @@ import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.ServiceGoal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.besa.PwAAgent.agent.PwAService;
 import com.besa.PwAAgent.agent.tasks.MusicoTerapia.ReproduccionCancion;
 import com.besa.PwAAgent.agent.tasks.MusicoTerapia.SeleccionarCancion;
 import com.besa.PwAAgent.agent.tasks.Retroalimentacion.RecibirRetroalimentacionCancion;
+import com.besa.PwAAgent.agent.utils.PwAUtil;
 import com.besa.PwAAgent.db.model.ActXPreferencia;
 import com.besa.PwAAgent.db.model.userprofile.PwAMedicalContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAPreferenceContext;
@@ -28,7 +30,7 @@ public class MusicoTerapia extends ServiceGoal<MusicoTerapiaContext> {
 
     private static String descrip = "MusicoTerapia";
 
-    public static MusicoTerapia buildGoal(BeliefAgent beliefAgent) {
+    public static MusicoTerapia buildGoal() {
         SeleccionarCancion sCancion = new SeleccionarCancion();
         ReproduccionCancion rCancion = new ReproduccionCancion();
         RecibirRetroalimentacionCancion retro = new RecibirRetroalimentacionCancion();
@@ -46,12 +48,12 @@ public class MusicoTerapia extends ServiceGoal<MusicoTerapiaContext> {
         rolePlan.addTask(retro, tarea);
 
         RationalRole musicTherapyRole = new RationalRole(descrip, rolePlan);
-        MusicoTerapia b = new MusicoTerapia(MotivationAgent.getPlanID(), musicTherapyRole, beliefAgent);
+        MusicoTerapia b = new MusicoTerapia(MotivationAgent.getPlanID(), musicTherapyRole);
         return b;
     }
 
-    public MusicoTerapia(int id, RationalRole role, BeliefAgent beliefAgent) {
-        super(id, role, descrip, 0, beliefAgent, new MusicoTerapiaContext());
+    public MusicoTerapia(int id, RationalRole role) {
+        super(id, role, descrip, 0, new MusicoTerapiaContext());
     }
 
     @Override
@@ -66,38 +68,53 @@ public class MusicoTerapia extends ServiceGoal<MusicoTerapiaContext> {
         BeliefAgent blvs = (BeliefAgent) believes;
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
-
         PwAMedicalContext medicalContext = (PwAMedicalContext) miPerfil.getUserMedicalContext();
-                //TODO: Determinar cuando la emocion es negativa.
+        PwAPreferenceContext prefContext = (PwAPreferenceContext) miPerfil.getUserContext().getPreferenceContext();
+        double valor = PwAUtil.getGustoActividad(PwAService.MUSICOTERAPIA, prefContext);
 
-        if (medicalContext.getFast() <= 5) {
-            // TODO: add gusto from db
-            return 0.4;
+        Map<String, Double> emotions = blvs.getInteractionState().getCurrentInteraction(currUser).getUserEmotions();
+        String maxEmotion = findMaxEmotionName(emotions);
+        double max = emotions.get(maxEmotion);
+
+        if (!(maxEmotion.equalsIgnoreCase("sorrow") || maxEmotion.equalsIgnoreCase("anger"))) {
+            max *= -1;
+        }
+
+        if (medicalContext.getFast() <= 4) {
+            return (0.4 + valor) * (1 + max);
         }
         return 0;
     }
 
+    private String findMaxEmotionName(Map<String, Double> emotions) {
+        double max = 0;
+        String maxEmotion = "";
+        for (Map.Entry<String, Double> entry : emotions.entrySet()) {
+            if (entry.getValue() > max) {
+                max = entry.getValue();
+                maxEmotion = entry.getKey();
+            }
+        }
+        return maxEmotion;
+    }
+
     @Override
     public double evaluatePlausibility(Believes believes) throws KernellAgentEventExceptionBESA {
-        // System.out.println("Meta MusicoTerapia evaluatePlausibility");
-        // TODO Auto-generated method stub
         return 1;
     }
 
     @Override
     public double evaluateContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA {
-        // System.out.println("Meta MusicoTerapia evaluateContribution");
         BeliefAgent blvs = (BeliefAgent) stateBDI.getBelieves();
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
         PwAPreferenceContext prefContext = (PwAPreferenceContext) miPerfil.getUserContext().getPreferenceContext();
         List<ActXPreferencia> listaAct = prefContext.getActXPreferenciaList();
         double valor = 0;
-
-        // TODO: change to repository mgmt
         for (ActXPreferencia act : listaAct) {
             if (act.getActividadPwa().getNombre().equalsIgnoreCase(PwAService.MUSICOTERAPIA.name())) {
                 valor = act.getGusto();
+                break;
             }
         }
         return valor;
@@ -106,21 +123,21 @@ public class MusicoTerapia extends ServiceGoal<MusicoTerapiaContext> {
 
     @Override
     public boolean predictResultUnlegality(StateBDI agentStatus) throws KernellAgentEventExceptionBESA {
-        // System.out.println("Meta MusicoTerapia predictResultUnlegability");
         return true;
     }
 
     @Override
     public boolean goalSucceeded(Believes believes) throws KernellAgentEventExceptionBESA {
-        // System.out.println("Meta MusicoTerapia evaluateViability");
-        //BeliefAgent blvs = (BeliefAgent) believes;
-        //TODO: Determinar cuando la emocion es positiva.
-        return false;
+        BeliefAgent blvs = (BeliefAgent) believes;
+        String currUser = blvs.getActiveUsers().get(0);
+        Map<String, Double> emotions = blvs.getInteractionState().getCurrentInteraction(currUser).getUserEmotions();
+        String maxEmotion = findMaxEmotionName(emotions);
+
+        return !(maxEmotion.equalsIgnoreCase("sorrow") || maxEmotion.equalsIgnoreCase("anger"));
     }
 
     @Override
-    public double calculateCriticality() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'calculateCriticality'");
+    public double calculateCriticality(Believes believes) {
+        return 0;
     }
 }

@@ -1,11 +1,15 @@
 package com.besa.PwAAgent.agent.goals.action;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.besa.PwAAgent.agent.tasks.LeerBiblia.AnimarAActividad;
-import com.besa.PwAAgent.agent.tasks.LeerBiblia.LeerVersiculo;
-import com.besa.PwAAgent.agent.tasks.LeerBiblia.PreguntarOpinion;
+import com.besa.PwAAgent.agent.tasks.LeerBiblia.RealizarActividadEspiritual;
+import com.besa.PwAAgent.db.model.userprofile.PwAPreferenceContext;
+import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
+import com.besa.PwAAgent.db.model.userprofile.Religion;
 
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
@@ -17,14 +21,12 @@ import rational.mapping.Believes;
 import rational.mapping.Plan;
 import rational.mapping.Task;
 
-public class LeerBiblia extends ServiceGoal<LeerBibliaContext>{
-    private static String descrip = "Medicamentos";
+public class LeerBiblia extends ServiceGoal<LeerBibliaContext> {
+    private static String descrip = "LeerBiblia";
 
-
-     public static LeerBiblia buildGoal(BeliefAgent beliefAgent) {
+    public static LeerBiblia buildGoal() {
         AnimarAActividad retro = new AnimarAActividad();
-        LeerVersiculo recomCuento = new LeerVersiculo();
-        PreguntarOpinion preguntarOpinion = new PreguntarOpinion();
+        RealizarActividadEspiritual recomCuento = new RealizarActividadEspiritual();
 
         List<Task> taskList;
         Plan rolePlan = new Plan();
@@ -35,60 +37,100 @@ public class LeerBiblia extends ServiceGoal<LeerBibliaContext>{
         taskList.add(retro);
         rolePlan.addTask(recomCuento, taskList);
 
-
-        taskList = new ArrayList<>();
-        taskList.add(recomCuento);
-        rolePlan.addTask(preguntarOpinion, taskList);
-
         RationalRole bibliaRole = new RationalRole(descrip, rolePlan);
-        LeerBiblia b = new LeerBiblia(MotivationAgent.getPlanID(), bibliaRole, beliefAgent);
+        LeerBiblia b = new LeerBiblia(MotivationAgent.getPlanID(), bibliaRole);
         return b;
     }
 
-    public LeerBiblia(int id, RationalRole role, BeliefAgent beliefAgent) {
-        super(id, role, descrip, 0, beliefAgent, new LeerBibliaContext());
+    public LeerBiblia(int id, RationalRole role) {
+        super(id, role, descrip, 0, new LeerBibliaContext());
     }
 
     @Override
-    public double detectGoal(Believes arg0) throws KernellAgentEventExceptionBESA {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'detectGoal'");
+    public double detectGoal(Believes beliefs) throws KernellAgentEventExceptionBESA {
+        BeliefAgent blvs = (BeliefAgent) beliefs;
+        String currUser = blvs.getActiveUsers().get(0);
+        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
+        PwAPreferenceContext preferenceContext = miPerfil.getPwAPreferenceContext();
+        LocalTime now = LocalTime.now();
+        LocalTime lastActivity = preferenceContext.getLastSpiritualActivity();
+        Religion religion = preferenceContext.getReligion();
+        Duration duration = Duration.between(lastActivity, now);
+        int level = preferenceContext.getNivelReligioso();
+        boolean activityNeeded = level != 0 && duration.toMinutes() > getMaxTime(level);
+
+        return !religion.getName().equalsIgnoreCase("ateo") && activityNeeded ? 1 : 0;
+    }
+
+    private long getMaxTime(int level) {
+        long time = 0;
+        switch (level) {
+            case 5:
+                time = 60;
+                break;
+            case 4:
+                time = 120;
+
+                break;
+            case 3:
+                time = 180;
+
+                break;
+            case 2:
+                time = 360;
+
+                break;
+            case 1:
+                time = 720;
+
+                break;
+            default:
+                time = Long.MAX_VALUE;
+                break;
+        }
+        return time;
     }
 
     @Override
-    public double evaluateContribution(StateBDI arg0) throws KernellAgentEventExceptionBESA {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'evaluateContribution'");
+    public double evaluateContribution(StateBDI state) throws KernellAgentEventExceptionBESA {
+        BeliefAgent blvs = (BeliefAgent) state.getBelieves();
+        String currUser = blvs.getActiveUsers().get(0);
+        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
+        PwAPreferenceContext preferenceContext = miPerfil.getPwAPreferenceContext();
+        int level = preferenceContext.getNivelReligioso();
+        return (level - 0d) / (5d);
     }
 
     @Override
-    public double evaluatePlausibility(Believes arg0) throws KernellAgentEventExceptionBESA {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'evaluatePlausibility'");
+    public double evaluatePlausibility(Believes beliefs) throws KernellAgentEventExceptionBESA {
+        BeliefAgent blvs = (BeliefAgent) beliefs;
+        String currUser = blvs.getActiveUsers().get(0);
+        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
+        PwAPreferenceContext preferenceContext = miPerfil.getPwAPreferenceContext();
+        Religion religion = preferenceContext.getReligion();
+        return religion.getName().equalsIgnoreCase("ateo") ? 0 : 1;
     }
 
     @Override
-    public double evaluateViability(Believes arg0) throws KernellAgentEventExceptionBESA {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'evaluateViability'");
+    public double evaluateViability(Believes beliefs) throws KernellAgentEventExceptionBESA {
+        return 1;
     }
 
     @Override
-    public boolean goalSucceeded(Believes arg0) throws KernellAgentEventExceptionBESA {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'goalSucceeded'");
+    public boolean goalSucceeded(Believes beliefs) throws KernellAgentEventExceptionBESA {
+        BeliefAgent blvs = (BeliefAgent) beliefs;
+        LeerBibliaContext context = (LeerBibliaContext) blvs.getServiceContext(LeerBibliaContext.class);
+        return context.getYaQuiereParar();
     }
 
     @Override
-    public boolean predictResultUnlegality(StateBDI arg0) throws KernellAgentEventExceptionBESA {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'predictResultUnlegality'");
+    public boolean predictResultUnlegality(StateBDI state) throws KernellAgentEventExceptionBESA {
+        return true;
     }
 
     @Override
-    public double calculateCriticality() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'calculateCriticality'");
+    public double calculateCriticality(Believes believes) {
+        return 0;
     }
-    
+
 }

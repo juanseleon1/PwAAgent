@@ -22,12 +22,12 @@ import rational.mapping.Plan;
 public class ProgramarRutina extends ServiceGoal<ProgramarRutinaContext>  {
     private final static String DESCRIPTION = "ProgramarRutina";
     
-    public ProgramarRutina(int id, RationalRole role, BeliefAgent beliefAgent) 
+    public ProgramarRutina(int id, RationalRole role) 
     {
-        super(id, role, DESCRIPTION, 0, beliefAgent, new ProgramarRutinaContext());
+        super(id, role, DESCRIPTION, 0, new ProgramarRutinaContext());
     }
 
-    public static ProgramarRutina buildGoal(BeliefAgent beliefAgent) 
+    public static ProgramarRutina buildGoal() 
     {
 
         ProgramarEjercicios progEjercicios = new ProgramarEjercicios();
@@ -36,7 +36,7 @@ public class ProgramarRutina extends ServiceGoal<ProgramarRutinaContext>  {
         rolePlan.addTask(progEjercicios);
         
         RationalRole rutEjercicioRole = new RationalRole(DESCRIPTION, rolePlan);
-        ProgramarRutina b = new ProgramarRutina(MotivationAgent.getPlanID(), rutEjercicioRole,beliefAgent);
+        ProgramarRutina b = new ProgramarRutina(MotivationAgent.getPlanID(), rutEjercicioRole);
         return b;
     }
     @Override
@@ -89,7 +89,7 @@ public class ProgramarRutina extends ServiceGoal<ProgramarRutinaContext>  {
         return false;
     }
     @Override
-    public double calculateCriticality() {
+    public double calculateCriticality(Believes believes) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'calculateCriticality'");
     }

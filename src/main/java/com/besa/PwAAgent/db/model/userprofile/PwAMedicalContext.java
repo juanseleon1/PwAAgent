@@ -23,23 +23,21 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-
-
 @Entity
 @Table(name = "perfil_medico")
 
 @NamedQueries({
-    @NamedQuery(name = "PwAMedicalContext.findAll", query = "SELECT p FROM PwAMedicalContext p"),
-    @NamedQuery(name = "PwAMedicalContext.findByPwAProfileCedula", query = "SELECT p FROM PwAMedicalContext p WHERE p.PwAProfileCedula = :PwAProfileCedula"),
-    @NamedQuery(name = "PwAMedicalContext.findByTomaMedicamentos", query = "SELECT p FROM PwAMedicalContext p WHERE p.tomaMedicamentos = :tomaMedicamentos"),
-    @NamedQuery(name = "PwAMedicalContext.findByDiscapAuditiva", query = "SELECT p FROM PwAMedicalContext p WHERE p.discapAuditiva = :discapAuditiva"),
-    @NamedQuery(name = "PwAMedicalContext.findByDiscapVisual", query = "SELECT p FROM PwAMedicalContext p WHERE p.discapVisual = :discapVisual"),
-    @NamedQuery(name = "PwAMedicalContext.findByDiscapMotora", query = "SELECT p FROM PwAMedicalContext p WHERE p.discapMotora = :discapMotora"),
-    @NamedQuery(name = "PwAMedicalContext.findByEstadoEnfermedad", query = "SELECT p FROM PwAMedicalContext p WHERE p.estadoEnfermedad = :estadoEnfermedad"),
-    @NamedQuery(name = "PwAMedicalContext.findByPeriodoVigila", query = "SELECT p FROM PwAMedicalContext p WHERE p.periodoVigila = :periodoVigila"),
-    @NamedQuery(name = "PwAMedicalContext.findByFast", query = "SELECT p FROM PwAMedicalContext p WHERE p.fast = :fast"),
-    @NamedQuery(name = "PwAMedicalContext.findByRiesgoCaida", query = "SELECT p FROM PwAMedicalContext p WHERE p.riesgoCaida = :riesgoCaida"),
-    @NamedQuery(name = "PwAMedicalContext.findBySppb", query = "SELECT p FROM PwAMedicalContext p WHERE p.sppb = :sppb")})
+        @NamedQuery(name = "PwAMedicalContext.findAll", query = "SELECT p FROM PwAMedicalContext p"),
+        @NamedQuery(name = "PwAMedicalContext.findByPwAProfileCedula", query = "SELECT p FROM PwAMedicalContext p WHERE p.PwAProfileCedula = :PwAProfileCedula"),
+        @NamedQuery(name = "PwAMedicalContext.findByTomaMedicamentos", query = "SELECT p FROM PwAMedicalContext p WHERE p.tomaMedicamentos = :tomaMedicamentos"),
+        @NamedQuery(name = "PwAMedicalContext.findByDiscapAuditiva", query = "SELECT p FROM PwAMedicalContext p WHERE p.discapAuditiva = :discapAuditiva"),
+        @NamedQuery(name = "PwAMedicalContext.findByDiscapVisual", query = "SELECT p FROM PwAMedicalContext p WHERE p.discapVisual = :discapVisual"),
+        @NamedQuery(name = "PwAMedicalContext.findByDiscapMotora", query = "SELECT p FROM PwAMedicalContext p WHERE p.discapMotora = :discapMotora"),
+        @NamedQuery(name = "PwAMedicalContext.findByEstadoEnfermedad", query = "SELECT p FROM PwAMedicalContext p WHERE p.estadoEnfermedad = :estadoEnfermedad"),
+        @NamedQuery(name = "PwAMedicalContext.findByPeriodoVigila", query = "SELECT p FROM PwAMedicalContext p WHERE p.periodoVigila = :periodoVigila"),
+        @NamedQuery(name = "PwAMedicalContext.findByFast", query = "SELECT p FROM PwAMedicalContext p WHERE p.fast = :fast"),
+        @NamedQuery(name = "PwAMedicalContext.findByRiesgoCaida", query = "SELECT p FROM PwAMedicalContext p WHERE p.riesgoCaida = :riesgoCaida"),
+        @NamedQuery(name = "PwAMedicalContext.findBySppb", query = "SELECT p FROM PwAMedicalContext p WHERE p.sppb = :sppb") })
 public class PwAMedicalContext extends MedicalContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,6 +70,9 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
     private Integer riesgoCaida;
     @Column(name = "sppb")
     private Integer sppb;
+    @Column
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<FranjaMedicamento> franjaMedicamentoList;
     @JoinColumn(name = "causa_demencia_condicion", referencedColumnName = "condicion")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private CausaDemencia causaDemenciaCondicion;
@@ -90,7 +91,8 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
         this.PwAProfileCedula = PwAProfileCedula;
     }
 
-    public PwAMedicalContext(String PwAProfileCedula, int tomaMedicamentos, int discapAuditiva, int discapVisual, int discapMotora, int estadoEnfermedad, int periodoVigila, int fast) {
+    public PwAMedicalContext(String PwAProfileCedula, int tomaMedicamentos, int discapAuditiva, int discapVisual,
+            int discapMotora, int estadoEnfermedad, int periodoVigila, int fast) {
         this.PwAProfileCedula = PwAProfileCedula;
         this.tomaMedicamentos = tomaMedicamentos;
         this.discapAuditiva = discapAuditiva;
@@ -197,7 +199,6 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
         this.PwAProfile = PwAProfile;
     }
 
-    
     public List<ActividadRutinaria> getActividadRutinariaList() {
         return actividadRutinariaList;
     }
@@ -220,5 +221,14 @@ public class PwAMedicalContext extends MedicalContext implements Serializable {
         hash += (PwAProfileCedula != null ? PwAProfileCedula.hashCode() : 0);
         return hash;
     }
+
+    public List<FranjaMedicamento> getFranjaMedicamentoList() {
+        return franjaMedicamentoList;
+    }
+
+    public void setFranjaMedicamentoList(List<FranjaMedicamento> franjaMedicamentoList) {
+        this.franjaMedicamentoList = franjaMedicamentoList;
+    }
+
 
 }

@@ -1,4 +1,3 @@
-
 package com.besa.PwAAgent.agent.goals.action;
 
 import BESA.BDI.AgentStructuralModel.StateBDI;
@@ -15,7 +14,7 @@ import com.besa.PwAAgent.agent.PwAService;
 import com.besa.PwAAgent.agent.tasks.Cuenteria.ReproducirCuento;
 import com.besa.PwAAgent.agent.tasks.Cuenteria.SeleccionarCuento;
 import com.besa.PwAAgent.agent.tasks.Retroalimentacion.RecibirRetroalimentacionCuento;
-import com.besa.PwAAgent.db.model.ActXPreferencia;
+import com.besa.PwAAgent.agent.utils.PwAUtil;
 import com.besa.PwAAgent.db.model.userprofile.PwAMedicalContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAPreferenceContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
@@ -29,7 +28,7 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
 
     private static String descrip = "Cuenteria";
 
-    public static Cuenteria buildGoal(BeliefAgent beliefAgent) {
+    public static Cuenteria buildGoal() {
         RecibirRetroalimentacionCuento retro = new RecibirRetroalimentacionCuento();
         SeleccionarCuento recomCuento = new SeleccionarCuento();
         ReproducirCuento rCuento = new ReproducirCuento();
@@ -48,17 +47,16 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
         rolePlan.addTask(retro, taskList);
 
         RationalRole cuenteriaRole = new RationalRole(descrip, rolePlan);
-        Cuenteria b = new Cuenteria(MotivationAgent.getPlanID(), cuenteriaRole, beliefAgent);
+        Cuenteria b = new Cuenteria(MotivationAgent.getPlanID(), cuenteriaRole);
         return b;
     }
 
-    public Cuenteria(int id, RationalRole role, BeliefAgent beliefAgent) {
-        super(id, role, descrip, 0, beliefAgent, new CuenteriaContext());
+    public Cuenteria(int id, RationalRole role) {
+        super(id, role, descrip, 0, new CuenteriaContext());
     }
 
     @Override
     public double evaluateViability(Believes believes) throws KernellAgentEventExceptionBESA {
-        // System.out.println("Meta Cuenteria evaluateViability");
         return 1;
     }
 
@@ -69,16 +67,15 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
 
-        PwAMedicalContext medicalContext = (PwAMedicalContext)miPerfil.getUserMedicalContext();
+        PwAMedicalContext medicalContext = (PwAMedicalContext) miPerfil.getUserMedicalContext();
+        PwAPreferenceContext prefContext = (PwAPreferenceContext) miPerfil.getUserContext().getPreferenceContext();
         UserInteractionState interactionContext = blvs.getInteractionState().getCurrentInteraction(currUser);
         Map<String, Double> userEmotions = interactionContext.getUserEmotions();
 
         if (medicalContext.getFast() <= 5) {
             if (userEmotions.get("atention") < 0.4
-                    && userEmotions.get("relaxation") < 0.6) {
-                        //TODO: add gusto from db
-                return 0.4;
-
+                    && userEmotions.get("calm") < 0.6) {
+                return 0.4 + PwAUtil.getGustoActividad(PwAService.CUENTERIA, prefContext);
             }
         }
         return 0;
@@ -86,60 +83,44 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
 
     @Override
     public double evaluatePlausibility(Believes believes) throws KernellAgentEventExceptionBESA {
-        // System.out.println("Meta Cuenteria evaluatePlausibility");
         return 1;
     }
 
     @Override
     public double evaluateContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA {
-        // System.out.println("Meta Cuenteria evaluateContribution");
-        // TODO Auto-generated method stub
         BeliefAgent blvs = (BeliefAgent) stateBDI.getBelieves();
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
         PwAPreferenceContext prefContext = (PwAPreferenceContext) miPerfil.getUserContext().getPreferenceContext();
-        List<ActXPreferencia> listaAct = prefContext.getActXPreferenciaList();
-        double valor = 0;
-
-        for (ActXPreferencia act : listaAct) {
-            if (act.getActividadPwa().getNombre().equalsIgnoreCase(PwAService.CUENTERIA.name())) {
-                valor = act.getGusto();
-            }
-        }
-
-        return valor + 1;
+        double valor = PwAUtil.getGustoActividad(PwAService.CUENTERIA, prefContext);
+        return valor;
 
     }
 
     @Override
     public boolean predictResultUnlegality(StateBDI agentStatus) throws KernellAgentEventExceptionBESA {
-        // System.out.println("Meta Cuenteria predictResultUnlegability");
-                // TODO Auto-generated method stub
-
         return true;
     }
 
     @Override
     public boolean goalSucceeded(Believes believes) throws KernellAgentEventExceptionBESA {
-        // System.out.println("Meta Cuenteria evaluateViability");
-                // TODO Auto-generated method stub
-
         BeliefAgent blvs = (BeliefAgent) believes;
-                String currUser = blvs.getActiveUsers().get(0);
+        String currUser = blvs.getActiveUsers().get(0);
 
-                UserInteractionState interactionContext = blvs.getInteractionState().getCurrentInteraction(currUser);
+        UserInteractionState interactionContext = blvs.getInteractionState().getCurrentInteraction(currUser);
         Map<String, Double> userEmotions = interactionContext.getUserEmotions();
-        if ((userEmotions.get("atention") >= 0.4
-                    && userEmotions.get("relaxation") >= 0.6)) {
-
-            return true;
-        }
-        return false;
+        return (userEmotions.get("attention") >= 0.4
+                && userEmotions.get("calm") >= 0.6);
     }
 
     @Override
-    public double calculateCriticality() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'calculateCriticality'");
+    public double calculateCriticality(Believes believes) {
+        BeliefAgent blvs = (BeliefAgent) believes;
+        String currUser = blvs.getActiveUsers().get(0);
+        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
+        PwAMedicalContext medicalContext = miPerfil.getUserMedicalContext();
+        double criticality = 0;
+        criticality += medicalContext.getFast() / 10d;
+        return criticality;
     }
 }

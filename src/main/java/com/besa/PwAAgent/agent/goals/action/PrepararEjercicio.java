@@ -3,7 +3,6 @@ package com.besa.PwAAgent.agent.goals.action;
 
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
-import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.MotivationAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.ServiceGoal;
 import rational.RationalRole;
@@ -20,7 +19,7 @@ public class PrepararEjercicio extends ServiceGoal<PrepararEjercicioContext> {
 
     private static final String DESCRIP = "PrepararEjercicio";
 
-    public static PrepararEjercicio buildGoal(BeliefAgent beliefAgent) {
+    public static PrepararEjercicio buildGoal() {
 
         PreguntarPreparacion prg = new PreguntarPreparacion("Hola! Voy a hacerte unas preguntas para"
                 + "asegurarme que todo esté listo para hacer nuestro ejercicio de hoy!");
@@ -32,12 +31,12 @@ public class PrepararEjercicio extends ServiceGoal<PrepararEjercicioContext> {
         tarea.add(prg);
 
         RationalRole convEmpRole = new RationalRole(DESCRIP, rolePlan);
-        PrepararEjercicio b = new PrepararEjercicio(MotivationAgent.getPlanID(), convEmpRole, beliefAgent);
+        PrepararEjercicio b = new PrepararEjercicio(MotivationAgent.getPlanID(), convEmpRole);
         return b;
     }
 
-    public PrepararEjercicio(int id, RationalRole role, BeliefAgent beliefAgent) {
-        super(id, role, DESCRIP, 0, beliefAgent, new PrepararEjercicioContext());
+    public PrepararEjercicio(int id, RationalRole role) {
+        super(id, role, DESCRIP, 0, new PrepararEjercicioContext());
     }
 
     @Override
@@ -94,8 +93,7 @@ public class PrepararEjercicio extends ServiceGoal<PrepararEjercicioContext> {
     }
 
     @Override
-    public double calculateCriticality() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'calculateCriticality'");
+    public double calculateCriticality(Believes believes) {
+       return 1;
     }
 }

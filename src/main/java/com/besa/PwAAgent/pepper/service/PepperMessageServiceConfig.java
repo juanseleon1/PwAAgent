@@ -19,12 +19,12 @@ public class PepperMessageServiceConfig extends MessageServiceConfig{
 
     @Override
     public RobotData translateSendMessageAction(ServiceDataRequest data) {
-        throw new UnsupportedOperationException("Unimplemented method 'translateSendMessageAction'");
+        return new RobotData(data.getId(), data.getServiceName(), "MSG", data.getParams());
     }
 
     @Override
     public DataBESA translateSendMessageResponse(RobotData data) {
-        throw new UnsupportedOperationException("Unimplemented method 'translateSendMessageResponse'");
+        return data;
     }
 
 }

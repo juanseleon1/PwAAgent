@@ -2,6 +2,7 @@
 package com.besa.PwAAgent.db.model.userprofile;
 
 import java.io.Serializable;
+import java.time.LocalTime;
 import java.util.List;
 
 import com.besa.PwAAgent.db.model.ActXPreferencia;
@@ -17,26 +18,25 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-
-
 @Entity
 @Table(name = "perfil_preferencia")
 
 @NamedQueries({
-    @NamedQuery(name = "PwAPreferenceContext.findAll", query = "SELECT p FROM PwAPreferenceContext p"),
-    @NamedQuery(name = "PwAPreferenceContext.findByPwAProfileCedula", query = "SELECT p FROM PwAPreferenceContext p WHERE p.PwAProfileCedula = :PwAProfileCedula"),
-    @NamedQuery(name = "PwAPreferenceContext.findByNombrePreferido", query = "SELECT p FROM PwAPreferenceContext p WHERE p.nombrePreferido = :nombrePreferido"),
-    @NamedQuery(name = "PwAPreferenceContext.findByGustoKaraoke", query = "SELECT p FROM PwAPreferenceContext p WHERE p.gustoKaraoke = :gustoKaraoke"),
-    @NamedQuery(name = "PwAPreferenceContext.findByGustoMusica", query = "SELECT p FROM PwAPreferenceContext p WHERE p.gustoMusica = :gustoMusica"),
-    @NamedQuery(name = "PwAPreferenceContext.findByGustoBaile", query = "SELECT p FROM PwAPreferenceContext p WHERE p.gustoBaile = :gustoBaile"),
-    @NamedQuery(name = "PwAPreferenceContext.findByBrilloPreferido", query = "SELECT p FROM PwAPreferenceContext p WHERE p.brilloPreferido = :brilloPreferido"),
-    @NamedQuery(name = "PwAPreferenceContext.findByVolPreferido", query = "SELECT p FROM PwAPreferenceContext p WHERE p.volPreferido = :volPreferido")})
+        @NamedQuery(name = "PwAPreferenceContext.findAll", query = "SELECT p FROM PwAPreferenceContext p"),
+        @NamedQuery(name = "PwAPreferenceContext.findByPwAProfileCedula", query = "SELECT p FROM PwAPreferenceContext p WHERE p.PwAProfileCedula = :PwAProfileCedula"),
+        @NamedQuery(name = "PwAPreferenceContext.findByNombrePreferido", query = "SELECT p FROM PwAPreferenceContext p WHERE p.nombrePreferido = :nombrePreferido"),
+        @NamedQuery(name = "PwAPreferenceContext.findByGustoKaraoke", query = "SELECT p FROM PwAPreferenceContext p WHERE p.gustoKaraoke = :gustoKaraoke"),
+        @NamedQuery(name = "PwAPreferenceContext.findByGustoMusica", query = "SELECT p FROM PwAPreferenceContext p WHERE p.gustoMusica = :gustoMusica"),
+        @NamedQuery(name = "PwAPreferenceContext.findByGustoBaile", query = "SELECT p FROM PwAPreferenceContext p WHERE p.gustoBaile = :gustoBaile"),
+        @NamedQuery(name = "PwAPreferenceContext.findByBrilloPreferido", query = "SELECT p FROM PwAPreferenceContext p WHERE p.brilloPreferido = :brilloPreferido"),
+        @NamedQuery(name = "PwAPreferenceContext.findByVolPreferido", query = "SELECT p FROM PwAPreferenceContext p WHERE p.volPreferido = :volPreferido") })
 public class PwAPreferenceContext extends PreferenceContext implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,6 +54,11 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
     @Column(name = "gusto_musica")
     private double gustoMusica;
     @Basic(optional = false)
+    @Column()
+    private double gustoEjercicio;
+    @Column()
+    private double gustoLeer;
+    @Basic(optional = false)
     @Column(name = "gusto_baile")
     private double gustoBaile;
     @Basic(optional = false)
@@ -62,6 +67,12 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
     @Basic(optional = false)
     @Column(name = "vol_preferido")
     private int volPreferido;
+    @ManyToOne
+    private Religion religion;
+    @Basic
+    private LocalTime lastSpiritualActivity;
+    @Basic
+    private int nivelReligioso;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pwaPreferenceContext", fetch = FetchType.EAGER)
     private List<PreferenciaXCuento> preferenciaXCuentoList;
     @JoinColumn(name = "perfil_pwa_cedula", referencedColumnName = "cedula", insertable = false, updatable = false)
@@ -81,7 +92,8 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
         this.PwAProfileCedula = PwAProfileCedula;
     }
 
-    public PwAPreferenceContext(String PwAProfileCedula, String nombrePreferido, double gustoKaraoke, double gustoMusica, double gustoBaile, int brilloPreferido, int volPreferido) {
+    public PwAPreferenceContext(String PwAProfileCedula, String nombrePreferido, double gustoKaraoke,
+            double gustoMusica, double gustoBaile, int brilloPreferido, int volPreferido) {
         this.PwAProfileCedula = PwAProfileCedula;
         this.nombrePreferido = nombrePreferido;
         this.gustoKaraoke = gustoKaraoke;
@@ -147,7 +159,6 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
         this.volPreferido = volPreferido;
     }
 
-    
     public List<PreferenciaXCuento> getPreferenciaXCuentoList() {
         return preferenciaXCuentoList;
     }
@@ -164,7 +175,6 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
         this.PwAProfile = PwAProfile;
     }
 
-    
     public List<ActXPreferencia> getActXPreferenciaList() {
         return actXPreferenciaList;
     }
@@ -173,7 +183,6 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
         this.actXPreferenciaList = actXPreferenciaList;
     }
 
-    
     public List<PreferenciaXBaile> getPreferenciaXBaileList() {
         return preferenciaXBaileList;
     }
@@ -182,7 +191,6 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
         this.preferenciaXBaileList = preferenciaXBaileList;
     }
 
-    
     public List<PreferenciaXCancion> getPreferenciaXCancionList() {
         return preferenciaXCancionList;
     }
@@ -197,5 +205,48 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
         hash += (PwAProfileCedula != null ? PwAProfileCedula.hashCode() : 0);
         return hash;
     }
+
+    public Religion getReligion() {
+        return religion;
+    }
+
+    public void setReligion(Religion religion) {
+        this.religion = religion;
+    }
+
+    public LocalTime getLastSpiritualActivity() {
+        return lastSpiritualActivity;
+    }
+
+    public void setLastSpiritualActivity(LocalTime lastSpiritualActivity) {
+        this.lastSpiritualActivity = lastSpiritualActivity;
+    }
+
+    public int getNivelReligioso() {
+        return nivelReligioso;
+    }
+
+    public void setNivelReligioso(int nivelReligioso) {
+        this.nivelReligioso = nivelReligioso;
+    }
+
+    public double getGustoEjercicio() {
+        return gustoEjercicio;
+    }
+
+    public void setGustoEjericio(double gustoEjericio) {
+        this.gustoEjercicio = gustoEjericio;
+    }
+
+    public double getGustoLeer() {
+        return gustoLeer;
+    }
+
+    public void setGustoLeer(double gustoLeer) {
+        this.gustoLeer = gustoLeer;
+    }
+
+
+    
 
 }

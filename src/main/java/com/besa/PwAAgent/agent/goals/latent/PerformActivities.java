@@ -14,16 +14,12 @@ public class PerformActivities extends LatentGoal {
 
     @Override
     public double detectGoal(Believes beliefs) throws KernellAgentEventExceptionBESA {
-        // BeliefAgent beliefAgent = (BeliefAgent) beliefs;
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'detectGoal'");
+        return 1;
     }
 
     @Override
     public double evaluateContribution(StateBDI state) throws KernellAgentEventExceptionBESA {
-        // BeliefAgent beliefAgent = (BeliefAgent) state.getBelieves();
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'evaluateContribution'");
+        return 1;
     }
 
 }

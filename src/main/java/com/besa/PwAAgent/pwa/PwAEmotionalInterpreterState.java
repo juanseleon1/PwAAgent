@@ -1,6 +1,4 @@
-package com.besa.PwAAgent;
-
-import com.besa.PwAAgent.pwa.PwAEmotionalModel;
+package com.besa.PwAAgent.pwa;
 
 import BESA.SocialRobot.UserEmotionalInterpreterAgent.agent.UserEmotionalInterpreterState;
 import BESA.SocialRobot.UserEmotionalInterpreterAgent.model.UserEmotionalModel;

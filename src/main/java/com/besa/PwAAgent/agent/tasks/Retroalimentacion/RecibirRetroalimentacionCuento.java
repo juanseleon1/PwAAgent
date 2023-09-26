@@ -30,13 +30,13 @@ public class RecibirRetroalimentacionCuento extends SRTask {
         CuenteriaContext cuenteriaContext = (CuenteriaContext) blvs.getServiceContext(MusicoTerapia.class);
 
         if (cuenteriaContext.getRetroalimentacionValue() == null) {
-            //cuenteriaContext.isTopicoActivo(PepperTopicsNames.RETROCUENTOTOPIC)
+            //TODO: cuenteriaContext.isTopicoActivo(PepperTopicsNames.RETROCUENTOTOPIC)
             if (true) {
                 if (num == 1) {
                     System.out.println("HOLA 2 " + num + "  " + cuenteriaContext.getRetroalimentacionValue());
                     infoServicio = new HashMap<>();
                     infoServicio.put("content", "Podria hacerte una pregunta?");
-                    infoServicio.put("isQuery", "true");
+                    infoServicio.put("origin", "hacerEspiritual");
                     sendActionRequest(infoServicio, "talk");
                     num++;
                 }

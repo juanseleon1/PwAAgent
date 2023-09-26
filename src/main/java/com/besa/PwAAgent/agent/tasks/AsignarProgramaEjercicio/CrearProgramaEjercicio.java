@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.besa.PwAAgent.agent.goals.action.AsignarProgramaEjercicio;
 import com.besa.PwAAgent.agent.goals.action.AsignarProgramaEjercicioContext;
 import com.besa.PwAAgent.db.model.Horario;
@@ -15,6 +17,10 @@ import com.besa.PwAAgent.db.model.ProgramaEjercicio;
 import com.besa.PwAAgent.db.model.userprofile.PwAExerciseProfile;
 import com.besa.PwAAgent.db.model.userprofile.PwAMedicalContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
+import com.besa.PwAAgent.db.repository.ExerciseProgramsRepository;
+import com.besa.PwAAgent.db.repository.HorarioRepository;
+import com.besa.PwAAgent.db.repository.PwAExerciseProfileRepository;
+import com.besa.PwAAgent.db.repository.PwAProfileRepository;
 
 import rational.mapping.Believes;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
@@ -25,8 +31,14 @@ public class CrearProgramaEjercicio extends SRTask {
     private HashMap<String, Object> infoServicio = new HashMap<>();
     Scanner scan;
     boolean puedoProseguir;
-    // @Autowired
-    // private PwAProfileRepository pwAProfileRepository;
+    @Autowired
+    private PwAProfileRepository pwAProfileRepository;
+    @Autowired
+    private PwAExerciseProfileRepository exerciseProfileRepository;
+    @Autowired
+    private ExerciseProgramsRepository exerciseProgramsRepository;
+    @Autowired
+    private HorarioRepository horarioRepository;
 
     public CrearProgramaEjercicio() {
         System.out.println(" (ProgramarRutina) - Meta construida.");
@@ -84,8 +96,7 @@ public class CrearProgramaEjercicio extends SRTask {
                             updatedPM.setRiesgoCaida(respuesta);
                             System.out.println(" Se ha guardado los valores! ");
                         }
-                        // TODO: RESPwABDInterface.updateMedicalProfile(updatedPM);
-                        // -- persistir en base de datos.
+                        pwAProfileRepository.save(miPerfil);
                     }
 
                 }
@@ -123,27 +134,27 @@ public class CrearProgramaEjercicio extends SRTask {
                         PwAExerciseProfile nuevoPwAExerciseProfile = new PwAExerciseProfile(userId, 0,
                                 date, 15, 0);
 
-                        List<ProgramaEjercicio> misProgramas = serviceContext.getExercisePrograms();
+                        List<ProgramaEjercicio> misProgramas = exerciseProgramsRepository.findAll();
+
                         for (int i = 0; i < misProgramas.size(); i++) {
                             if (misProgramas.get(i).getNombre().equals("C1")) {
                                 nuevoPwAExerciseProfile.setNombrePrograma(misProgramas.get(i));
                             }
                         }
-
-                        // RESPwABDInterface.createExcerciseProfile(nuevoPwAExerciseProfile);
+                        exerciseProfileRepository.save(nuevoPwAExerciseProfile);
                         miPerfil.setExerciseProfile(nuevoPwAExerciseProfile);
                         miPerfil.setTieneProgramaEjercicio(true);
-                        // RESPwABDInterface.updateProfile(miPerfil);
-                        // --- CREAR HORARIO --- //
+                        pwAProfileRepository.save(miPerfil);
+
                         List<Horario> horario = new ArrayList<>();
                         for (int i = 0; i < 7; i++) {
                             Horario aux = new Horario(i + 1, 15);
                             aux.setCedula(nuevoPwAExerciseProfile);
-                            // RESPwABDInterface.createSchedule(aux);
+                            horarioRepository.save(aux);
                             horario.add(aux);
                         }
                         nuevoPwAExerciseProfile.setHorarioList(horario);
-                        // RESPwABDInterface.updateExcerciseProfile(nuevoPwAExerciseProfile);
+                        exerciseProfileRepository.save(nuevoPwAExerciseProfile);
                         break;
 
                     default:
@@ -225,24 +236,25 @@ public class CrearProgramaEjercicio extends SRTask {
             date = calendar.getTime();
             PwAExerciseProfile nuevoPwAExerciseProfile = new PwAExerciseProfile(userId,
                     0, date, horaList.get(dayOfWeek - 1), 0);
-            List<ProgramaEjercicio> misProgramas = serviceContext.getExercisePrograms();
+            List<ProgramaEjercicio> misProgramas = exerciseProgramsRepository.findAll();
 
             for (int i = 0; i < misProgramas.size(); i++) {
                 if (misProgramas.get(i).getNombre().equals("C1")) {
                     nuevoPwAExerciseProfile.setNombrePrograma(misProgramas.get(i));
                 }
             }
-            // RESPwABDInterface.createExcerciseProfile(nuevoPwAExerciseProfile);
+
+            exerciseProfileRepository.save(nuevoPwAExerciseProfile);
             miPerfil.setExerciseProfile(nuevoPwAExerciseProfile);
-            // RESPwABDInterface.updateProfile(blvs.getbPwAProfile().getPerfil());
+            pwAProfileRepository.save(miPerfil);
+
             // -- CREAR HORARIO -- //
 
-            System.out.println("y aca?");
             List<Horario> horario = new ArrayList<>();
             for (int i = 0; i < 7; i++) {
                 Horario aux = new Horario(i + 1, horaList.get(i));
                 aux.setCedula(nuevoPwAExerciseProfile);
-                // RESPwABDInterface.createSchedule(aux);
+                horarioRepository.save(aux);
                 horario.add(aux);
             }
             nuevoPwAExerciseProfile.setHorarioList(horario);
