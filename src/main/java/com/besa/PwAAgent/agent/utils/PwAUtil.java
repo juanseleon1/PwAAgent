@@ -14,12 +14,15 @@ import com.besa.PwAAgent.db.model.userprofile.PwAPreferenceContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
 import com.besa.PwAAgent.db.repository.AntecedenteRepository;
 
+import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.InteractionState.InteractionContext.ServiceContext;
 
 public class PwAUtil {
     public static double getGustoActividad(PwAService actividad, PwAPreferenceContext perfil) {
         double gusto = 0;
+        ReportBESA.debug("getActXPreferenciaListJLEON5" + perfil.getActXPreferenciaList());
         for (ActXPreferencia a : perfil.getActXPreferenciaList()) {
+            ReportBESA.debug("JLEON5"+a.getActividadPwa().getNombre() + " " + actividad.name());
             if (a.getActividadPwa().getNombre().equalsIgnoreCase(actividad.name())) {
                 gusto = a.getGusto();
                 break;

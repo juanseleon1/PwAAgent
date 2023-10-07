@@ -7,9 +7,15 @@ import java.util.Map;
 
 import com.besa.PwAAgent.agent.goals.action.Cuenteria;
 import com.besa.PwAAgent.agent.goals.action.DarMedicamentos;
+import com.besa.PwAAgent.agent.goals.action.DemostrarVida;
 import com.besa.PwAAgent.agent.goals.action.LeerBiblia;
 import com.besa.PwAAgent.agent.goals.action.MusicoTerapia;
+import com.besa.PwAAgent.agent.goals.emergency.DetectarEmergencia;
 import com.besa.PwAAgent.agent.goals.latent.GenerateWellBeing;
+import com.besa.PwAAgent.agent.goals.latent.PerformActivities;
+import com.besa.PwAAgent.agent.goals.latent.PerformAssistance;
+import com.besa.PwAAgent.agent.goals.latent.PerformEntertainment;
+import com.besa.PwAAgent.agent.goals.latent.PerformSpiritual;
 
 import BESA.BDI.AgentStructuralModel.Agent.LatentGoalStructure;
 import BESA.BDI.AgentStructuralModel.LatentGoalStructure.AgentRole;
@@ -28,19 +34,23 @@ public class PwAAgentConfiguration extends SRConfiguration {
         MotivationAgentConfiguration motivationAgentConfiguration = getConfig();
         LatentGoalStructure latentGoalStructure = new LatentGoalStructure();
         LatentGoal root = new GenerateWellBeing();
-        LatentGoal activities = new GenerateWellBeing();
-        LatentGoal assistance = new GenerateWellBeing();
-        LatentGoal entertainment = new GenerateWellBeing();
-        LatentGoal spiritual = new GenerateWellBeing();
-        // LatentGoal stimulation = new GenerateWellBeing();
+        latentGoalStructure.setRoot(root);
+        LatentGoal activities = new PerformActivities();
+        LatentGoal assistance = new PerformAssistance();
+        LatentGoal entertainment = new PerformEntertainment();
+        LatentGoal spiritual = new PerformSpiritual();
         MusicoTerapia musicoTerapia = MusicoTerapia.buildGoal();
         Cuenteria cuenteria = Cuenteria.buildGoal();
         DarMedicamentos darMedicamentos = DarMedicamentos.buildGoal();
         LeerBiblia leerBiblia = LeerBiblia.buildGoal();
         RequestPermission requestPermission = RequestPermission.buildGoal();
         ExplainDecisions explainDecisions = ExplainDecisions.buildGoal();
+        DemostrarVida vida = DemostrarVida.buildGoal();
+        DetectarEmergencia emergencia = DetectarEmergencia.buildGoal();
         latentGoalStructure.addOrphanBDIGoal(requestPermission);
         latentGoalStructure.addOrphanBDIGoal(explainDecisions);
+        latentGoalStructure.addOrphanBDIGoal(emergencia);
+        latentGoalStructure.addOrphanBDIGoal(vida);
         latentGoalStructure.addRelation(root, activities);
         latentGoalStructure.addRelation(activities, assistance);
         latentGoalStructure.addRelation(assistance, darMedicamentos);
@@ -58,8 +68,6 @@ public class PwAAgentConfiguration extends SRConfiguration {
         latentGoalStructure.addRelation(spiritual, leerBiblia);
         latentGoalStructure.addRelation(entertainment, leerBiblia);
 
-        // latentGoalStructure.addRelation(activities, stimulation);
-        // latentGoalStructure.addRelation(stimulation, stimulation);
         motivationAgentConfiguration.setGoalStructure(latentGoalStructure);
 
         AgentRole defaultRole = new AgentRole();
@@ -80,7 +88,6 @@ public class PwAAgentConfiguration extends SRConfiguration {
         EmotionalImpact emotionalImpact = new EmotionalImpact(eventInfluences, forgetFactor, baseValue);
         emotionalImpact.setPositiveEmotionName("Ira");
         emotionalImpacts.add(emotionalImpact);
-
 
         EmotionalAgentRole emotionalRole = new EmotionalAgentRole(emotionalImpacts);
         emotionalRole.setWeight(root.getId(), activities.getId(), 1);

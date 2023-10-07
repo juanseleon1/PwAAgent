@@ -1,5 +1,6 @@
 package com.besa.PwAAgent.pepper.adapter;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.io.Serializable;
 import java.util.Map;
@@ -10,23 +11,19 @@ public class PepperSendable implements Serializable {
     private double id;
     private String proxyName;
     private String methodName;
-    private Map<String, ?> params;
+    private Map<String, Object> params;
 
-    public PepperSendable(double id, String proxyName, String methodName, Map<String, ?> params) {
+    public PepperSendable() {
+    }
+
+    public PepperSendable(double id, String proxyName, String methodName, Map<String, Object> params) {
         this.proxyName = proxyName;
         this.methodName = methodName;
         this.id = id;
         this.params = params;
     }
 
-    public String getMethodName() {
-        return methodName;
-    }
-
-    public void setMethodName(String methodName) {
-        this.methodName = methodName;
-    }
-
+    @JsonProperty("id")
     public double getId() {
         return id;
     }
@@ -35,14 +32,7 @@ public class PepperSendable implements Serializable {
         this.id = id;
     }
 
-    public Map<String, ?> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, ?> params) {
-        this.params = params;
-    }
-
+    @JsonProperty("proxyName")
     public String getProxyName() {
         return proxyName;
     }
@@ -51,4 +41,27 @@ public class PepperSendable implements Serializable {
         this.proxyName = proxyName;
     }
 
+    @JsonProperty("methodName")
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    @JsonProperty("params")
+    public Map<String, Object> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
+    }
+
+    @Override
+    public String toString() {
+        return "PepperSendable [id=" + id + ", proxyName=" + proxyName + ", methodName=" + methodName + ", params="
+                + params + "]";
+    }
 }

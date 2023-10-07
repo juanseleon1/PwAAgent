@@ -4,12 +4,13 @@ import BESA.Kernel.Agent.Event.DataBESA;
 import BESA.SocialRobot.ServiceProvider.agent.adapter.RobotData;
 import BESA.SocialRobot.ServiceProvider.services.robotresources.ResourceServiceConfig;
 import BESA.SocialRobot.agentUtils.ServiceDataRequest;
+import rational.data.InfoData;
 
 public class PepperRobotResourceServiceConfig extends ResourceServiceConfig{
 
     @Override
     public DataBESA translateOtherActionsToDataBesa(RobotData data) {
-        throw new UnsupportedOperationException("Unimplemented method 'translateOtherActionsToDataBesa'");
+                return new InfoData("null");
     }
 
     @Override

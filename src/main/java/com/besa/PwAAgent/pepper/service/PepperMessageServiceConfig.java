@@ -5,7 +5,7 @@ import BESA.SocialRobot.ServiceProvider.agent.adapter.RobotData;
 import BESA.SocialRobot.ServiceProvider.services.interfaces.message.MessageServiceConfig;
 import BESA.SocialRobot.agentUtils.ServiceDataRequest;
 
-public class PepperMessageServiceConfig extends MessageServiceConfig{
+public class PepperMessageServiceConfig extends MessageServiceConfig {
 
     @Override
     public DataBESA translateOtherActionsToDataBesa(RobotData data) {
@@ -19,7 +19,13 @@ public class PepperMessageServiceConfig extends MessageServiceConfig{
 
     @Override
     public RobotData translateSendMessageAction(ServiceDataRequest data) {
-        return new RobotData(data.getId(), data.getServiceName(), "MSG", data.getParams());
+
+        if (data.getParams().containsKey("requests")) {
+            data.getParams().put("category", "PERMISSION");
+        } else if (data.getParams().containsKey("message")) {
+            data.getParams().put("category", "NOTIFICATION");
+        }
+        return new RobotData(data.getId(), data.getServiceName(), "Message", data.getParams());
     }
 
     @Override

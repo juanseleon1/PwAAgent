@@ -3,6 +3,7 @@ package com.besa.PwAAgent.db.model.userprofile;
 import java.util.List;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +23,7 @@ public class Religion {
     @OneToMany(fetch = FetchType.EAGER)
     private List<Versiculo> versiculos;
     @Basic
+    @Column(length = 10000)
     private String oracion;
 
     public String getName() {

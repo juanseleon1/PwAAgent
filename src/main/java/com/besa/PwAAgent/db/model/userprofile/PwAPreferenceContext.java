@@ -246,6 +246,18 @@ public class PwAPreferenceContext extends PreferenceContext implements Serializa
         this.gustoLeer = gustoLeer;
     }
 
+    @Override
+    public String toString() {
+        return "PwAPreferenceContext [PwAProfileCedula=" + PwAProfileCedula + ", nombrePreferido=" + nombrePreferido
+                + ", gustoKaraoke=" + gustoKaraoke + ", gustoMusica=" + gustoMusica + ", gustoEjercicio="
+                + gustoEjercicio + ", gustoLeer=" + gustoLeer + ", gustoBaile=" + gustoBaile + ", brilloPreferido="
+                + brilloPreferido + ", volPreferido=" + volPreferido + ", religion=" + religion
+                + ", lastSpiritualActivity=" + lastSpiritualActivity + ", nivelReligioso=" + nivelReligioso
+                + ", preferenciaXCuentoList=" + preferenciaXCuentoList + ", PwAProfile=" + PwAProfile
+                + ", actXPreferenciaList=" + actXPreferenciaList + ", preferenciaXBaileList=" + preferenciaXBaileList
+                + ", preferenciaXCancionList=" + preferenciaXCancionList + "]";
+    }
+
 
     
 

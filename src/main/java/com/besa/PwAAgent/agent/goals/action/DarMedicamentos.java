@@ -94,7 +94,7 @@ public class DarMedicamentos extends ServiceGoal<DarMedicamentosContext> {
     @Override
     public boolean goalSucceeded(Believes beliefs) throws KernellAgentEventExceptionBESA {
         BeliefAgent blvs = (BeliefAgent) beliefs;
-        DarMedicamentosContext context = (DarMedicamentosContext)blvs.getServiceContext(DarMedicamentosContext.class);
+        DarMedicamentosContext context = (DarMedicamentosContext)blvs.getServiceContext(DarMedicamentos.class);
         return context.isConfirmacionMedicamentos();
     }
 

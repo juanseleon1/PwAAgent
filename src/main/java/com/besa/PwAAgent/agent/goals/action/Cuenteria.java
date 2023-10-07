@@ -2,6 +2,7 @@ package com.besa.PwAAgent.agent.goals.action;
 
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
+import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.InteractionState.UserInteraction.UserInteractionState;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.MotivationAgent;
@@ -13,7 +14,8 @@ import java.util.Map;
 import com.besa.PwAAgent.agent.PwAService;
 import com.besa.PwAAgent.agent.tasks.Cuenteria.ReproducirCuento;
 import com.besa.PwAAgent.agent.tasks.Cuenteria.SeleccionarCuento;
-import com.besa.PwAAgent.agent.tasks.Retroalimentacion.RecibirRetroalimentacionCuento;
+import com.besa.PwAAgent.agent.tasks.Retroalimentacion.RealizarRetroalimentacion;
+import com.besa.PwAAgent.agent.tasks.Retroalimentacion.ResponderRetroalimentacion;
 import com.besa.PwAAgent.agent.utils.PwAUtil;
 import com.besa.PwAAgent.db.model.userprofile.PwAMedicalContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAPreferenceContext;
@@ -29,7 +31,10 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
     private static String descrip = "Cuenteria";
 
     public static Cuenteria buildGoal() {
-        RecibirRetroalimentacionCuento retro = new RecibirRetroalimentacionCuento();
+        List<String> preguntas = new ArrayList<>(); // TODO
+        CuenteriaContext context = new CuenteriaContext();
+        RealizarRetroalimentacion retro = new RealizarRetroalimentacion(preguntas);
+        ResponderRetroalimentacion retroR = new ResponderRetroalimentacion();
         SeleccionarCuento recomCuento = new SeleccionarCuento();
         ReproducirCuento rCuento = new ReproducirCuento();
 
@@ -46,13 +51,17 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
         taskList.add(rCuento);
         rolePlan.addTask(retro, taskList);
 
+        taskList = new ArrayList<>();
+        taskList.add(retro);
+        rolePlan.addTask(retroR, taskList);
+
         RationalRole cuenteriaRole = new RationalRole(descrip, rolePlan);
-        Cuenteria b = new Cuenteria(MotivationAgent.getPlanID(), cuenteriaRole);
+        Cuenteria b = new Cuenteria(MotivationAgent.getPlanID(), cuenteriaRole, context);
         return b;
     }
 
-    public Cuenteria(int id, RationalRole role) {
-        super(id, role, descrip, 0, new CuenteriaContext());
+    public Cuenteria(int id, RationalRole role, CuenteriaContext context) {
+        super(id, role, descrip, 0, context);
     }
 
     @Override
@@ -62,20 +71,22 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
 
     @Override
     public double detectGoal(Believes believes) throws KernellAgentEventExceptionBESA {
-        System.out.println("Meta Cuenteria detectGoal");
+        ReportBESA.debug("Meta Cuenteria detectGoal");
         BeliefAgent blvs = (BeliefAgent) believes;
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
 
         PwAMedicalContext medicalContext = (PwAMedicalContext) miPerfil.getUserMedicalContext();
-        PwAPreferenceContext prefContext = (PwAPreferenceContext) miPerfil.getUserContext().getPreferenceContext();
+        PwAPreferenceContext prefContext = (PwAPreferenceContext) miPerfil.getPwAPreferenceContext();
         UserInteractionState interactionContext = blvs.getInteractionState().getCurrentInteraction(currUser);
         Map<String, Double> userEmotions = interactionContext.getUserEmotions();
 
         if (medicalContext.getFast() <= 5) {
-            if (userEmotions.get("atention") < 0.4
-                    && userEmotions.get("calm") < 0.6) {
-                return 0.4 + PwAUtil.getGustoActividad(PwAService.CUENTERIA, prefContext);
+            if (userEmotions.size() > 0) {
+                if (userEmotions.get("attention") < 0.4
+                        && userEmotions.get("calm") < 0.6) {
+                    return 0.4 + PwAUtil.getGustoActividad(PwAService.CUENTERIA, prefContext);
+                }
             }
         }
         return 0;
@@ -91,7 +102,7 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
         BeliefAgent blvs = (BeliefAgent) stateBDI.getBelieves();
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
-        PwAPreferenceContext prefContext = (PwAPreferenceContext) miPerfil.getUserContext().getPreferenceContext();
+        PwAPreferenceContext prefContext = (PwAPreferenceContext) miPerfil.getPwAPreferenceContext();
         double valor = PwAUtil.getGustoActividad(PwAService.CUENTERIA, prefContext);
         return valor;
 

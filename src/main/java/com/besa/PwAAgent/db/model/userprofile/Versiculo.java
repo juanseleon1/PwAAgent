@@ -1,6 +1,7 @@
 package com.besa.PwAAgent.db.model.userprofile;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -9,8 +10,10 @@ public class Versiculo {
     @Id
     private int id;
     @Basic
+    @Column(length = 1000)
     private String texto;
     @Basic
+    @Column(length = 65)
     private String informacion;
 
     

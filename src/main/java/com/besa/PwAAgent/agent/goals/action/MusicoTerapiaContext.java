@@ -2,14 +2,14 @@ package com.besa.PwAAgent.agent.goals.action;
 
 import java.util.Map;
 
+import com.besa.PwAAgent.agent.utils.UserEvaluableContext;
 import com.besa.PwAAgent.db.model.PreferenciaXBaile;
 import com.besa.PwAAgent.db.model.PreferenciaXCancion;
 
-import BESA.SocialRobot.BDIAgent.BeliefAgent.InteractionState.InteractionContext.ServiceContext;
 import BESA.SocialRobot.ServiceProvider.agent.adapter.RobotData;
 import rational.data.InfoData;
 
-public class MusicoTerapiaContext extends ServiceContext {
+public class MusicoTerapiaContext extends UserEvaluableContext {
 
     private PreferenciaXCancion cancionActual;
     private boolean estaBailando;
@@ -31,13 +31,9 @@ public class MusicoTerapiaContext extends ServiceContext {
         boolean update = false;
         RobotData robotData = (RobotData) data;
         Map<String, ?> response = robotData.getParameters();
-        if (response.containsKey("retroValue")) {
-            retroalimentacionValue = (String) response.get("retroValue");
-            update = true;
-        }
 
-        if (response.containsKey("finishAnim")) {
-            estaBailando = (boolean) response.get("finishAnim");
+        if (response.containsKey("animationEnded")) {
+            estaBailando = !(boolean) response.get("animationEnded");
         }
 
         if (response.containsKey("endVideo")) {
@@ -79,4 +75,39 @@ public class MusicoTerapiaContext extends ServiceContext {
         //TODO in all contexts with feedback
     }
 
+    @Override
+    public MusicoTerapiaContext clone() {
+        MusicoTerapiaContext cloned = new MusicoTerapiaContext();
+        cloned.estaBailando = estaBailando;
+        cloned.cancionActual = cancionActual == null ? cancionActual
+                : new PreferenciaXCancion(cancionActual.getPreferenciaXCancionPK());
+        cloned.baileActual = baileActual == null ? baileActual
+                : new PreferenciaXBaile(baileActual.getPreferenciaXBailePK());
+        return cloned;
+    }
+
+    public void setEstaBailando(boolean estaBailando) {
+        this.estaBailando = estaBailando;
+    }
+
+    public void setRetroalimentacionValue(String retroalimentacionValue) {
+        this.retroalimentacionValue = retroalimentacionValue;
+    }
+
+    public boolean isVideoEnded() {
+        return videoEnded;
+    }
+
+    public void setVideoEnded(boolean videoEnded) {
+        this.videoEnded = videoEnded;
+    }
+
+    @Override
+    public void updateTasteForRelatedObjs(double factor) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateTasteForRelatedObjs'");
+    }
+
+
+    
 }

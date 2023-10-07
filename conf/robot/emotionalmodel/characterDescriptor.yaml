@@ -1,32 +1,113 @@
 emotionalModelDescriptors:
-  - playerNames: [A1,A2,A3,A4,A5,A6,A7,A8,A9,A10,A11]
+  - playerNames: [A1]
     personRelationships:
-      Mama: Cercano
-      Vecino: Enemigo
-      Transeunte: Desconocido
+      user: Cercano
+      robot: Amigo
+      Abuela: Cercano
+      Caperucita: Cercano
+      Lobo: Enemigo
+      Cerdo: Cercano
+      Familia: Amigo
     eventDesirabilities:
-      Morir: Indeseable
-      Ganar: Deseable
-      Perder: Algo Indeseable
+      feels: Deseable
+      INTERNALPOSPLUS: Deseable
+      INTERNALPOS: Algo Deseable
+      INTERNALNEG: Algo Indeseable
+      INTERNALNEGPLUS: Indeseable
+      NORESPONSE: Indeseable
+      POSVOICEEMOTION: Algo Deseable
+      NEGVOICEEMOTION: Algo Indeseable
+      ENFERMAR: Indeseable
+      ALEGRARSE: Deseable
+      ASUSTADA: Indeseable
+      VER: Indiferente
+      EMOCIONAR: Algo Deseable
+      DEVORAR: Indeseable
+      ESCAPAR: Deseable
+      HUIR: Algo Deseable
+      ABRAZAR: Deseable
+      LLEVAR: Indiferente
+      OBSERVAR: Indiferente
+      HABLA: Indiferente
+      AMENAZAR: Algo Indeseable
+      APRECIAR: Deseable
+      ENGANAR: Indeseable
+      TRAICIONAR: Indeseable
+      SOSPECHAR: Indeseable
+      SORPRENDER: Algo Deseable
+      GRITAR: Deseable
+      PERSEGUIR: Indeseable
+      SONAR: Indiferente
+      CONSTRUIR: Algo Deseable
+      APARECER: Indiferente
+      DESTRUIR: Deseable
+      REFUGIARSE: Algo Deseable
+      CELEBRAR: Deseable
+      VITOREAR: Deseable
+      QUEMAR: Indeseable
     objectRelationships:
-      Loteria: Valioso
-      Billetera: Importante
-      Mama: Importante
+      calm: Valioso
+      anger: Repulsivo
+      joy: Importante
+      sorrow: Repulsivo
+      laughter: Indiferente
+      excitement: Indiferente
+      surprise: Valioso
+      attention: Importante
+      Cerdo: Valioso
+      Casa: Valioso
+      Éxito: Importante
+      Cola: Importante
+      Regalo: Importante
+      Naturaleza: Valioso
+      Caperucita: Importante
+      IdeaBuena: Valioso
+      Abuela: Importante
+      Lobo: Importante
+      noobject: Indiferente
     emotionalAxis:
-      - positiveName: Felicidad
-        negativeName: Tristeza
+      - positiveName: HAPPINESS
+        negativeName: SADNESS
         currentValue: 0.2
         baseValue: 0
         forgetFactor: 0.1
         eventInfluences:
-          Morir: 1
-          Ganar: 0.8
-          Perder: 0.2
-      - positiveName: Tranquilidad
-        negativeName: Ira
-        currentValue: 0
-        baseValue: -0.2
-        forgetFactor: 0.1
-        eventInfluences:
-          Morir: 0.6
-          Perder: 0.7
+          feels: 1
+          INTERNALPOSPLUS: 0.7
+          INTERNALPOS: 0.3
+          INTERNALNEG: 0.3
+          INTERNALNEGPLUS: 0.7
+          NORESPONSE: 0.3
+          POSVOICEEMOTION: 0.4
+          NEGVOICEEMOTION: 0.4
+          POSEMOSTATE: 0.6
+          NEGEMOSTATE: 0.6
+          SPEECHDETECTED: 0.4
+          ENFERMAR: 0.6
+          ALEGRARSE: 0.6
+          ASUSTAR: 0.4
+          VER: 0.4
+          EMOCIONAR: 0.5
+          DEVORAR: 0.8
+          ESCAPAR: 0.8
+          HUIR: 0.5
+          ABRAZAR: 0.6
+          LLEVAR: 0.3
+          OBSERVAR: 0.3
+          HABLAR: 0.5
+          AMENAZAR: 0.5
+          APRECIAR: 0.5
+          ENGANAR: 0.6
+          TRAICIONAR: 0.7
+          SOSPECHAR: 0.5
+          SORPRENDER: 0.5
+          GRITAR: 0.3
+          PERSEGUIR: 0.5
+          SONAR: 0.4
+          CONSTRUIR: 0.5
+          APARECER: 0.4
+          DESTRUIR: 0.7
+          REFUGIARSE: 0.5
+          CELEBRAR: 0.6
+          VITOREAR: 0.6
+          QUEMAR: 0.6

@@ -9,18 +9,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
+import com.besa.PwAAgent.utils.SpringContext;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import BESA.Exception.ExceptionBESA;
+import BESA.Log.ReportBESA;
 import BESA.SocialRobot.ServiceProvider.agent.adapter.SRAdapterReceiver;
 import BESA.SocialRobot.ServiceProvider.agent.guard.RobotReplyData;
 
 public class PepperAdapterReceiver extends SRAdapterReceiver implements Runnable {
-    @Autowired
-    private ObjectMapper objectMapper;
+
     protected AtomicBoolean ready;
     protected ServerSocket ss;
     private int port;
@@ -34,8 +33,10 @@ public class PepperAdapterReceiver extends SRAdapterReceiver implements Runnable
     @Override
     public void setup() {
         try {
-            System.out.println("PepperAdapterReceiver setup with port: " + port);
+            ReportBESA.debug("PepperAdapterReceiver setup with port: " + port);
             ss = new ServerSocket(port);
+            Thread t = new Thread(this);
+            t.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,7 +44,7 @@ public class PepperAdapterReceiver extends SRAdapterReceiver implements Runnable
 
     @Override
     public void run() {
-
+        
         while (ready.get()) {
             try {
                 Socket s = ss.accept();
@@ -54,7 +55,12 @@ public class PepperAdapterReceiver extends SRAdapterReceiver implements Runnable
                     public void run() {
                         RobotReplyData reply;
                         try {
-                            reply = objectMapper.readValue(json, RobotReplyData.class);
+                            boolean containsEmo = json.contains("getUserEmotions");
+                            if(!containsEmo)
+                                ReportBESA.debug("ENTRANDO \n" + json + "\n");
+                            reply = SpringContext.getBean(ObjectMapper.class).readValue(json, RobotReplyData.class);
+                            if(!containsEmo)
+                                ReportBESA.debug("RECIBIENDO \n" + reply + "\n");
                             handleRobotData(reply);
                         } catch (JsonProcessingException e) {
                             e.printStackTrace();

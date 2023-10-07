@@ -28,12 +28,6 @@ FUNCTION_BLOCK autonomy_system
         DEFAULT := 0;
     END_DEFUZZIFY
 
-    FUZZIFY AutonomyLevel
-        TERM Low := (0, 1) (30, 1) (50, 0);
-        TERM Medium := (30, 0) (50, 1) (70, 0);
-        TERM High := (50, 0) (70, 1) (100, 1);
-    END_FUZZIFY
-
     RULEBLOCK No1
         AND : MIN;
         OR : MAX;
@@ -41,6 +35,12 @@ FUNCTION_BLOCK autonomy_system
         RULE 1 : IF (Criticality IS Low AND Accountability IS Low) THEN AutonomyLevel IS High;
         RULE 2 : IF (Criticality IS High AND Accountability IS High) THEN AutonomyLevel IS Low;
         RULE 3 : IF (Criticality IS Medium AND Accountability IS Medium) THEN AutonomyLevel IS Medium;
+        RULE 4 : IF (Criticality IS Medium AND Accountability IS High) THEN AutonomyLevel IS Low;
+        RULE 5 : IF (Criticality IS High AND Accountability IS Medium) THEN AutonomyLevel IS Low;
+        RULE 6 : IF (Criticality IS Low AND Accountability IS Medium) THEN AutonomyLevel IS Medium;
+        RULE 7 : IF (Criticality IS Medium AND Accountability IS Low) THEN AutonomyLevel IS Medium;
+        RULE 8 : IF (Criticality IS High AND Accountability IS Low) THEN AutonomyLevel IS Medium;
+        RULE 9 : IF (Criticality IS Low AND Accountability IS High) THEN AutonomyLevel IS Medium;
     END_RULEBLOCK
 
 END_FUNCTION_BLOCK

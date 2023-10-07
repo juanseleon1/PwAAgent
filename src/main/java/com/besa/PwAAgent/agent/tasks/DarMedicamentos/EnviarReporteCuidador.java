@@ -9,6 +9,7 @@ import com.besa.PwAAgent.agent.goals.action.DarMedicamentos;
 import com.besa.PwAAgent.agent.goals.action.DarMedicamentosContext;
 import com.besa.PwAAgent.db.model.userprofile.Dosis;
 import com.besa.PwAAgent.db.model.userprofile.FranjaMedicamento;
+import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
 
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.PsychologicalState.AgentEmotionalState.AgentEmotionalState;
@@ -23,7 +24,8 @@ public class EnviarReporteCuidador extends SRTask {
         BeliefAgent blvs = (BeliefAgent) beliefs;
         AgentEmotionalState state = blvs.getPsychologicalState().getAgentEmotionalState();
         String currUser = blvs.getActiveUsers().get(0);
-        String userName = blvs.getUserProfile(currUser).getUserContext().getSocioDemoContext().getName();
+        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
+        String userName = miPerfil.getNombre();
         DarMedicamentosContext darMedicamentosContext = (DarMedicamentosContext) blvs
                 .getServiceContext(DarMedicamentos.class);
 
@@ -36,6 +38,7 @@ public class EnviarReporteCuidador extends SRTask {
             reporte.append("se tomo los medicamentos a las" + LocalTime.now().toString());
             sb.append(userName);
             sb.append("me alegra que te hayas tomado los medicamentos!");
+            infoServicio.put("style", "animated");
             sendActionRequest(infoServicio, "talk");
             evento = "tomo";
         } else {

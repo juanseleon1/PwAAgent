@@ -9,7 +9,7 @@ public class PepperMovementServiceConfig extends MovementServiceConfig{
 
     @Override
     public DataBESA translateOtherActionsToDataBesa(RobotData data) {
-        throw new UnsupportedOperationException("Unimplemented method 'translateOtherActionsToDataBesa'");
+        return data;
     }
 
     @Override

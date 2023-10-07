@@ -1,32 +1,39 @@
-{"properties": [
-  {
-    "name": "robot.ip",
-    "type": "java.lang.String",
-    "description": "A description for 'robot.ip'"
-  },
-  {
-    "name": "robot.port",
-    "type": "java.lang.String",
-    "description": "A description for 'robot.port'"
-  },
-  {
-    "name": "robot.resourcePath",
-    "type": "java.lang.String",
-    "description": "A description for 'robot.resourcePath'"
-  },
-  {
-    "name": "robot.charPath",
-    "type": "java.lang.String",
-    "description": "A description for 'robot.charPath'"
-  },
-  {
-    "name": "robot.semanticPath",
-    "type": "java.lang.String",
-    "description": "A description for 'robot.semanticPath'"
-  },
-  {
-    "name": "robot.profilePath",
-    "type": "java.lang.String",
-    "description": "A description for 'robot.profilePath'"
-  }
-]}
+{
+    "properties": [
+        {
+            "name": "robot.profilePath",
+            "type": "java.lang.String",
+            "description": "A description for 'robot.profilePath'"
+        },
+        {
+            "name": "robot.resourcePath",
+            "type": "java.lang.String",
+            "description": "A description for 'robot.resourcePath'"
+        },
+        {
+            "name": "robot.charPath",
+            "type": "java.lang.String",
+            "description": "A description for 'robot.charPath'"
+        },
+        {
+            "name": "robot.semanticPath",
+            "type": "java.lang.String",
+            "description": "A description for 'robot.semanticPath'"
+        },
+        {
+            "name": "robot.port",
+            "type": "java.lang.String",
+            "description": "A description for 'robot.port'"
+        },
+        {
+            "name": "robot.ip",
+            "type": "java.lang.String",
+            "description": "A description for 'robot.ip'"
+        },
+        {
+            "name": "robot.fuzzyPath",
+            "type": "java.lang.String",
+            "description": "A description for 'robot.fuzzyPath'"
+        }
+    ]
+}

@@ -1,47 +1,46 @@
 package com.besa.PwAAgent.other;
 
-import java.util.Scanner;
-import java.util.Set;
+import com.besa.PwAAgent.agent.utils.TerminalUtils;
 
 import BESA.SocialRobot.ServiceProvider.agent.adapter.RobotData;
 import BESA.SocialRobot.ServiceProvider.agent.adapter.SRAdapter;
 
-public class MessageAdapter extends SRAdapter{
-    private Scanner scanner;
-    private Set<Double> queries; 
+public class MessageAdapter extends SRAdapter {
 
-    public MessageAdapter(Scanner scanner, Set<Double> queries) {
-        this.scanner = scanner;
-        this.queries = queries;
+    private TerminalUtils utils;
+
+    public MessageAdapter(TerminalUtils utils) {
+        this.utils = utils;
     }
 
     @Override
     public void sendRequest(RobotData data) {
-        String toPrint = (String)data.getParameters().get("content");
-        System.out.println(toPrint);
+        String msg = (String) data.getParameters().get("message");
+        String category = (String) data.getParameters().get("category");
+        double ack = (double) data.getId();
+
+        switch (category.toUpperCase()) {
+            case "NOTIFICATION":
+                String priority = (String) data.getParameters().get("priority");
+                utils.sendPriorityNotification(ack, priority, msg);
+                break;
+            case "PERMISSION":
+                utils.processPermissionRequest(ack, msg);
+                break;
+        }
     }
 
     @Override
     public void setup() {
-        
+
     }
 
-    public Scanner getScanner() {
-        return scanner;
+    public TerminalUtils getUtils() {
+        return utils;
     }
 
-    public void setScanner(Scanner scanner) {
-        this.scanner = scanner;
+    public void setUtils(TerminalUtils utils) {
+        this.utils = utils;
     }
-
-    public synchronized Set<Double> getQueries() {
-        return queries;
-    }
-
-    public void setQueries(Set<Double> queries) {
-        this.queries = queries;
-    }
-
-    
 
 }

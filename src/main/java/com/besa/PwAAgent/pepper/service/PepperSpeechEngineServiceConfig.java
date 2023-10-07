@@ -11,7 +11,7 @@ public class PepperSpeechEngineServiceConfig extends SpeechEngineServiceConfig {
 
     @Override
     public DataBESA translateOtherActionsToDataBesa(RobotData data) {
-        throw new UnsupportedOperationException("Unimplemented method 'translateOtherActionsToDataBesa'");
+        return data;
     }
 
     @Override
@@ -59,7 +59,6 @@ public class PepperSpeechEngineServiceConfig extends SpeechEngineServiceConfig {
     @Override
     public RobotData translateTalkAction(ServiceDataRequest data) {
         return new RobotData(data.getId(), data.getServiceName(), "SAY", data.getParams());
-
     }
 
     @Override

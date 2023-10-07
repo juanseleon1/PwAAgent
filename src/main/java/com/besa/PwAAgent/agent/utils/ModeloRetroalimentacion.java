@@ -8,6 +8,8 @@ import com.besa.PwAAgent.db.model.PreferenciaXCancion;
 import com.besa.PwAAgent.db.model.PreferenciaXCuento;
 import com.besa.PwAAgent.db.model.Regla;
 
+import BESA.Log.ReportBESA;
+
 public class ModeloRetroalimentacion<T> {
 
     private T activity;
@@ -31,7 +33,7 @@ public class ModeloRetroalimentacion<T> {
                     c.setGusto(c.getGusto() + reglaAplicada.getFeedback());
                 }
             }
-            System.out.println("New Gustos: " + c.getGusto());
+            ReportBESA.debug("New Gustos: " + c.getGusto());
             //TODO: RESPwABDInterface.updatePrefXCancion(c);
 
         } else if (activity instanceof PreferenciaXCuento) {

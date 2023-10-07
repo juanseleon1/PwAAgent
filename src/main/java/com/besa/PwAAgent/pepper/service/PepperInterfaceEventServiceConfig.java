@@ -5,12 +5,14 @@ import BESA.SocialRobot.HumanCooperationAgent.guard.InteractionAnswerData;
 import BESA.SocialRobot.ServiceProvider.agent.adapter.RobotData;
 import BESA.SocialRobot.ServiceProvider.services.interfaces.interfaceevent.InterfaceEventServiceConfig;
 import BESA.SocialRobot.agentUtils.ServiceDataRequest;
+import rational.data.InfoData;
 
 public class PepperInterfaceEventServiceConfig extends InterfaceEventServiceConfig{
 
     @Override
     public DataBESA translateOtherActionsToDataBesa(RobotData data) {
-        throw new UnsupportedOperationException("Unimplemented method 'translateOtherActionsToDataBesa'");
+                return new InfoData("null");
+
     }
 
     @Override
@@ -25,7 +27,7 @@ public class PepperInterfaceEventServiceConfig extends InterfaceEventServiceConf
 
     @Override
     protected InteractionAnswerData handleInterfaceEvent(RobotData data) {
-        throw new UnsupportedOperationException("Unimplemented method 'handleInterfaceEvent'");
+        return new InteractionAnswerData(false, "-1");
     }
 
     @Override

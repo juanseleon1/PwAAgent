@@ -21,9 +21,9 @@ public class RecordarSobreMedicamentos extends SRTask {
         BeliefAgent blvs = (BeliefAgent) beliefs;
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
+        String userName = miPerfil.getNombre();
         PwAMedicalContext medicalContext = miPerfil.getUserMedicalContext();
         LocalTime now = LocalTime.now();
-        String userName = blvs.getUserProfile(currUser).getUserContext().getSocioDemoContext().getName();
         DarMedicamentosContext darMedicamentosContext = (DarMedicamentosContext) blvs.getServiceContext(DarMedicamentos.class);
 
         FranjaMedicamento franja = null;
@@ -48,6 +48,7 @@ public class RecordarSobreMedicamentos extends SRTask {
 
             Map<String, Object> infoServicio = new HashMap<>();
             infoServicio.put("content", sb.toString());
+            infoServicio.put("style", "animated");
             sendActionRequest(infoServicio, "talk");
         }
 

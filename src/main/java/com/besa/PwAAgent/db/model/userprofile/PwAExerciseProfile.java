@@ -177,4 +177,12 @@ public class PwAExerciseProfile implements Serializable {
         return hash;
     }
 
+    @Override
+    public String toString() {
+        return "PwAExerciseProfile [PwAProfileCedula=" + PwAProfileCedula + ", indexIntensidadActual="
+                + indexIntensidadActual + ", fechaProx=" + fechaProx + ", horaProx=" + horaProx + ", diasHechos="
+                + diasHechos + ", ejercicioList=" + ejercicioList + ", horarioList=" + horarioList + ", PwAProfile="
+                + PwAProfile + ", nombrePrograma=" + nombrePrograma + ", historialList=" + historialList + "]";
+    }
+
 }

@@ -53,7 +53,7 @@ public class ModeloSeleccion<T> {
         List<Cromosoma> auxCromosomas = cromosomas;
 
         percentSelected = Math.random();
-//        System.out.println("percentSelected: " + percentSelected);
+//        ReportBESA.debug("percentSelected: " + percentSelected);
         if (percentSelected < auxCromosomas.get(0).getAverageSelectionProbability()) {
             searched = true;
             cromosomaPosterior = auxCromosomas.get(0);

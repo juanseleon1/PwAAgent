@@ -10,6 +10,7 @@ import com.besa.PwAAgent.agent.goals.action.DarMedicamentos;
 import com.besa.PwAAgent.agent.goals.action.DarMedicamentosContext;
 import com.besa.PwAAgent.db.model.userprofile.Dosis;
 import com.besa.PwAAgent.db.model.userprofile.FranjaMedicamento;
+import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
 
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.SRTask;
@@ -22,7 +23,8 @@ public class EsperarConfirmacion extends SRTask {
     public void executeTask(Believes beliefs) {
         BeliefAgent blvs = (BeliefAgent) beliefs;
         String currUser = blvs.getActiveUsers().get(0);
-        String userName = blvs.getUserProfile(currUser).getUserContext().getSocioDemoContext().getName();
+        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
+        String userName = miPerfil.getNombre();
         DarMedicamentosContext darMedicamentosContext = (DarMedicamentosContext) blvs
                 .getServiceContext(DarMedicamentos.class);
         LocalTime now = LocalTime.now();
@@ -49,7 +51,7 @@ public class EsperarConfirmacion extends SRTask {
             sb.append("Dime si, cuando te hayas tomado el medicamento. O dime no, si no te lo quieres tomar");
             Map<String, Object> infoServicio = new HashMap<>();
             infoServicio.put("content", sb.toString());
-            infoServicio.put("origin", "medicamento");
+            infoServicio.put("style", "animated");
             sendActionRequest(infoServicio, "talk");
         }
     }

@@ -25,7 +25,7 @@ public class DarMedicamentosContext extends ServiceContext {
         RobotData robotData = (RobotData) data;
         Map<String, ?> response = robotData.getParameters();
         if (response.containsKey("wordRecognized")) {
-            wordRecognized = (String) response.get("retroValue");
+            wordRecognized = (String) response.get("wordRecognized");
             confirmacionMedicamentos = wordRecognized.equals("si");
             update = true;
         }
@@ -54,5 +54,14 @@ public class DarMedicamentosContext extends ServiceContext {
 
     public void setWordRecognized(String wordRecognized) {
         this.wordRecognized = wordRecognized;
+    }
+
+    @Override
+    public DarMedicamentosContext clone() {
+        DarMedicamentosContext cloned = new DarMedicamentosContext();
+        cloned.confirmacionMedicamentos = confirmacionMedicamentos;
+        cloned.wordRecognized = wordRecognized;
+        cloned.franja = franja;
+        return cloned;
     }
 }

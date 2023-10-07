@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.besa.PwAAgent.agent.tasks.LeerBiblia.AnimarAActividad;
+import com.besa.PwAAgent.agent.tasks.LeerBiblia.CerrarActividadEspiritual;
 import com.besa.PwAAgent.agent.tasks.LeerBiblia.RealizarActividadEspiritual;
 import com.besa.PwAAgent.db.model.userprofile.PwAPreferenceContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
@@ -13,6 +14,7 @@ import com.besa.PwAAgent.db.model.userprofile.Religion;
 
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
+import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.MotivationAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.ServiceGoal;
@@ -27,6 +29,7 @@ public class LeerBiblia extends ServiceGoal<LeerBibliaContext> {
     public static LeerBiblia buildGoal() {
         AnimarAActividad retro = new AnimarAActividad();
         RealizarActividadEspiritual recomCuento = new RealizarActividadEspiritual();
+        CerrarActividadEspiritual cerrar = new CerrarActividadEspiritual();
 
         List<Task> taskList;
         Plan rolePlan = new Plan();
@@ -36,6 +39,10 @@ public class LeerBiblia extends ServiceGoal<LeerBibliaContext> {
         taskList = new ArrayList<>();
         taskList.add(retro);
         rolePlan.addTask(recomCuento, taskList);
+
+        taskList = new ArrayList<>();
+        taskList.add(recomCuento);
+        rolePlan.addTask(cerrar, taskList);
 
         RationalRole bibliaRole = new RationalRole(descrip, rolePlan);
         LeerBiblia b = new LeerBiblia(MotivationAgent.getPlanID(), bibliaRole);
@@ -54,12 +61,15 @@ public class LeerBiblia extends ServiceGoal<LeerBibliaContext> {
         PwAPreferenceContext preferenceContext = miPerfil.getPwAPreferenceContext();
         LocalTime now = LocalTime.now();
         LocalTime lastActivity = preferenceContext.getLastSpiritualActivity();
+        if (lastActivity == null) {
+            lastActivity = LocalTime.now().minusHours(7);
+        }
         Religion religion = preferenceContext.getReligion();
         Duration duration = Duration.between(lastActivity, now);
         int level = preferenceContext.getNivelReligioso();
-        boolean activityNeeded = level != 0 && duration.toMinutes() > getMaxTime(level);
 
-        return !religion.getName().equalsIgnoreCase("ateo") && activityNeeded ? 1 : 0;
+        boolean activityNeeded = level != 0 && duration.toMinutes() > getMaxTime(level);
+        return (!religion.getName().equalsIgnoreCase("ateo") && activityNeeded) ? 1 : 0;
     }
 
     private long getMaxTime(int level) {
@@ -119,8 +129,25 @@ public class LeerBiblia extends ServiceGoal<LeerBibliaContext> {
     @Override
     public boolean goalSucceeded(Believes beliefs) throws KernellAgentEventExceptionBESA {
         BeliefAgent blvs = (BeliefAgent) beliefs;
-        LeerBibliaContext context = (LeerBibliaContext) blvs.getServiceContext(LeerBibliaContext.class);
-        return context.getYaQuiereParar();
+        String currUser = blvs.getActiveUsers().get(0);
+        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
+        PwAPreferenceContext preferenceContext = miPerfil.getPwAPreferenceContext();
+        LocalTime now = LocalTime.now();
+        LocalTime lastActivity = preferenceContext.getLastSpiritualActivity();
+        if (lastActivity == null) {
+            lastActivity = LocalTime.now().minusHours(7);
+        }
+        Religion religion = preferenceContext.getReligion();
+        Duration duration = Duration.between(lastActivity, now);
+        int level = preferenceContext.getNivelReligioso();
+
+        boolean activityNeeded = level != 0 && duration.toMinutes() > getMaxTime(level);
+        LeerBibliaContext context = (LeerBibliaContext) blvs.getServiceContext(LeerBiblia.class);
+        boolean goalSucceeded = context.getYaQuiereParar();
+        ReportBESA.debug("goalSucceeded: " + goalSucceeded);
+        ReportBESA.debug("goalSucceeded2: " + !(!religion.getName().equalsIgnoreCase("ateo") && activityNeeded));
+
+        return goalSucceeded || !(!religion.getName().equalsIgnoreCase("ateo") && activityNeeded);
     }
 
     @Override
