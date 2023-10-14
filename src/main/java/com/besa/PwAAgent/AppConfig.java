@@ -1,14 +1,11 @@
 package com.besa.PwAAgent;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Scanner;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +13,9 @@ import org.springframework.core.env.Environment;
 
 import com.besa.PwAAgent.agent.utils.MessageAdapterReceiver;
 import com.besa.PwAAgent.agent.utils.TerminalUtils;
+import com.besa.PwAAgent.db.model.userprofile.Dosis;
+import com.besa.PwAAgent.db.model.userprofile.FranjaMedicamento;
+import com.besa.PwAAgent.db.model.userprofile.PwAMedicalContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
 import com.besa.PwAAgent.db.repository.PwAProfileRepository;
 import com.besa.PwAAgent.other.MailAdapter;
@@ -41,7 +41,6 @@ import com.besa.PwAAgent.pwa.PwAEmotionalInterpreterState;
 import com.besa.PwAAgent.pwa.PwAEnrichmentStrategy;
 
 import BESA.BDI.AgentStructuralModel.StateBDI;
-import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionAgentState;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionExecutor.ActionExecutor;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionExecutor.RobotActionProfile;
@@ -50,6 +49,8 @@ import BESA.SocialRobot.BDIAgent.ActionAgent.ActionModulator.EnrichmentStrategy;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.PhysicalState.InternalState.RobotResources;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.PsychologicalState.AgentEmotionalState.RobotEmotionalStrategy;
+import BESA.SocialRobot.BDIAgent.BeliefAgent.UserProfile.Context.SocioDemographicalContext;
+import BESA.SocialRobot.BDIAgent.BeliefAgent.UserProfile.Context.UserContext;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.autonomy.SRAutonomyManager;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.utils.MotivationAgentConfiguration;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.utils.SRConfiguration;
@@ -90,11 +91,10 @@ public class AppConfig {
                 String charPath = env.getProperty("robot.charPath");
                 String profilePath = env.getProperty("robot.profilePath");
                 String fuzzyPath = env.getProperty("robot.fuzzyPath");
-                Set<Double> queries = new HashSet<>();
                 PepperAdapter adapter = new PepperAdapter(robotIP, robotPort);
                 MailAdapter mailAdapter = new MailAdapter();
-                Scanner scanner = new Scanner(System.in);
-                TerminalUtils terminal = new TerminalUtils(config.getMotivationAgent(), new MessageAdapterReceiver());
+                MessageAdapterReceiver receiver = new MessageAdapterReceiver();
+                TerminalUtils terminal = new TerminalUtils(receiver);
                 MessageAdapter messageAdapter = new MessageAdapter(terminal);
                 int portNumber = 53152;
                 Map<String, List<SRService<?>>> serviceProviders = new HashMap<>();
@@ -107,7 +107,7 @@ public class AppConfig {
                                 new MailService(ServiceNames.MAIL, mailAdapter, new PepperAdapterReceiver(portNumber++),
                                                 new PepperMailServiceConfig()));
                 interfacesServices.add(new MessageService(ServiceNames.MESSAGE, messageAdapter,
-                                new PepperMessageAdapterReceiver(scanner, queries), new PepperMessageServiceConfig()));
+                                receiver, new PepperMessageServiceConfig()));
                 serviceProviders.put("interfaces", interfacesServices);
 
                 List<SRService<?>> robotResourceServices = new ArrayList<>();
@@ -169,17 +169,41 @@ public class AppConfig {
                 UserEmotionalInterpreterState userState = new PwAEmotionalInterpreterState();
                 config.setUserEmotionalInterpreterState(userState);
 
+                config.setRiskDetectionAgentState(new PwARiskDetectionAgentState());
                 config.setup();
                 config.start();
+                terminal.setAgent(config.getMotivationAgent());
                 Optional<PwAProfile> optPerfil = repo.findById("0");
                 if (optPerfil.isPresent()) {
                         PwAProfile perfil = optPerfil.get();
                         StateBDI state = (StateBDI) config.getMotivationAgent().getState();
                         BeliefAgent blvs = (BeliefAgent) state.getBelieves();
+                        PwAMedicalContext medical = perfil.getUserMedicalContext();
+                        List<FranjaMedicamento> franjas = new ArrayList<>();
+                        List<Dosis> dosis = new ArrayList<>();
+                        Dosis dosis1 = new Dosis();
+                        dosis1.setCantidad(2);
+                        dosis1.setMedicamento("Telmisartán");
+                        Dosis dosis2 = new Dosis();
+                        dosis2.setCantidad(1);
+                        dosis2.setMedicamento("Vitamina D");
+                        dosis.add(dosis1);
+                        dosis.add(dosis2);
+                        FranjaMedicamento franja = new FranjaMedicamento();
+                        franja.setHora(LocalTime.now().plusMinutes(5));
+                        franja.setId(1);
+                        franja.setDosis(dosis);
+                        franjas.add(franja);
+                        medical.setFranjaMedicamentoList(franjas);
+                        UserContext context = new UserContext();
+                        SocioDemographicalContext sContext = new SocioDemographicalContext();
+                        sContext.setId("0");
+                        sContext.setName(perfil.getNombre());
+                        sContext.setLastName(perfil.getApellido());
+                        context.setSocioDemoContext(sContext);
+                        perfil.setUserContext(context);
                         blvs.getActiveUsers().add("0");
                         blvs.addUserProfile("0", perfil);
-                        ReportBESA.debug("Perfil cargado" + perfil.getPwAPreferenceContext());
-                        ReportBESA.debug("Perfil cargado" + perfil.getExerciseProfile());
                 }
                 terminal.setRecords((ExplainabilityAgentState) config.getExplainabilityAgent().getState());
                 Thread t = new Thread(terminal);

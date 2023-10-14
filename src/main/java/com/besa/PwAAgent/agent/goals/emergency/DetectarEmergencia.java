@@ -37,6 +37,7 @@ public class DetectarEmergencia extends GoalBDI {
         RationalRole emergenciaRole = new RationalRole(descrip, rolePlan);
         DetectarEmergencia b = new DetectarEmergencia(MotivationAgent.getPlanID(), emergenciaRole, descrip,
                 GoalBDITypes.DUTY);
+        b.setAuthorized(true);
         return b;
     }
 

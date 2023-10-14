@@ -1,4 +1,4 @@
-FUNCTION_BLOCK Performance_system
+FUNCTION_BLOCK performance_system
     VAR_INPUT
         emotions : REAL;
         feedback : REAL;
@@ -9,9 +9,9 @@ FUNCTION_BLOCK Performance_system
     END_VAR
 
     FUZZIFY emotions
-        TERM Low := (0, 1) (0.3, 1) (0.7, 0);
-        TERM Medium := (0.3, 0) (0.7, 1) (1, 0);
-        TERM High := (0.7, 0) (1, 1);
+        TERM Low := (-1, 1) (-0.7, 1) (-0.3, 0);
+        TERM Medium := (-0.7, 0) (-0.3, 1) (0.3, 0);
+        TERM High := (-0.3, 0) (1, 1);
     END_FUZZIFY
 
     FUZZIFY feedback

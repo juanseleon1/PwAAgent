@@ -8,6 +8,8 @@ import com.besa.PwAAgent.db.model.PreferenciaXBaile;
 import com.besa.PwAAgent.db.model.PreferenciaXCancion;
 import com.besa.PwAAgent.db.model.PreferenciaXCuento;
 
+import BESA.Log.ReportBESA;
+
 /**
  *
  * @author ASUS
@@ -53,7 +55,7 @@ public class ModeloSeleccion<T> {
         List<Cromosoma> auxCromosomas = cromosomas;
 
         percentSelected = Math.random();
-//        ReportBESA.debug("percentSelected: " + percentSelected);
+        //ReportBESA.debug("percentSelected: " + percentSelected);
         if (percentSelected < auxCromosomas.get(0).getAverageSelectionProbability()) {
             searched = true;
             cromosomaPosterior = auxCromosomas.get(0);

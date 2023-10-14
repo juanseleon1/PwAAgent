@@ -21,7 +21,7 @@ public class SeleccionarCancion extends SRTask {
     private String userName;
 
     public SeleccionarCancion() {
-        // ReportBESA.debug("--- Task Seleccionar Cancion Iniciada ---");
+        // //ReportBESA.debug("--- Task Seleccionar Cancion Iniciada ---");
     }
 
     @Override
@@ -29,7 +29,7 @@ public class SeleccionarCancion extends SRTask {
         BeliefAgent blvs = (BeliefAgent) parameters;
         blvs.getInteractionState().setActiveService(MusicoTerapia.class.getName());
 
-        ReportBESA.debug("--- Execute Task Seleccionar Cancion ---");
+        // ReportBESA.debug("--- Execute Task Seleccionar Cancion ---");
 
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
@@ -48,7 +48,9 @@ public class SeleccionarCancion extends SRTask {
         musicoterapiaContext.setCancionActual(cancionSelected);
 
         infoServicio = new HashMap<>();
-        infoServicio.put("content", "La canción seleccionada es " + cancionSelected.getCancion().getNombre());
+        infoServicio.put("content",
+                "Veo que te encantan las canciones de " + cancionSelected.getCancion().getGenero().getGenero()
+                        + " entonces, la canción seleccionada es " + cancionSelected.getCancion().getNombre());
         infoServicio.put("style", "animated");
         sendActionRequest(infoServicio, "talk");
 
@@ -59,7 +61,6 @@ public class SeleccionarCancion extends SRTask {
         super.interruptTask(believes);
         BeliefAgent blvs = (BeliefAgent) believes;
         MusicoTerapiaContext musicoterapiaContext = (MusicoTerapiaContext) blvs.getServiceContext(MusicoTerapia.class);
-        ReportBESA.debug("--- Interrupt Task Seleccionar Cancion ---");
         StringBuilder sb = new StringBuilder();
         sb.append("Oh, espera");
         sb.append(userName);
@@ -74,7 +75,7 @@ public class SeleccionarCancion extends SRTask {
     @Override
     public void cancelTask(Believes believes) {
         super.cancelTask(believes);
-        ReportBESA.debug("--- Cancel Task Seleccionar Cancion ---");
+        // ReportBESA.debug("--- Cancel Task Seleccionar Cancion ---");
         BeliefAgent blvs = (BeliefAgent) believes;
         MusicoTerapiaContext musicoterapiaContext = (MusicoTerapiaContext) blvs.getServiceContext(MusicoTerapia.class);
         musicoterapiaContext.setCancionActual(null);

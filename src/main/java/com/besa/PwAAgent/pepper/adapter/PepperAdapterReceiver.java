@@ -33,7 +33,7 @@ public class PepperAdapterReceiver extends SRAdapterReceiver implements Runnable
     @Override
     public void setup() {
         try {
-            ReportBESA.debug("PepperAdapterReceiver setup with port: " + port);
+            //ReportBESA.debug("PepperAdapterReceiver setup with port: " + port);
             ss = new ServerSocket(port);
             Thread t = new Thread(this);
             t.start();
@@ -56,11 +56,11 @@ public class PepperAdapterReceiver extends SRAdapterReceiver implements Runnable
                         RobotReplyData reply;
                         try {
                             boolean containsEmo = json.contains("getUserEmotions");
-                            if(!containsEmo)
-                                ReportBESA.debug("ENTRANDO \n" + json + "\n");
+                            //if(!containsEmo)
+                                //ReportBESA.debug("ENTRANDO \n" + json + "\n");
                             reply = SpringContext.getBean(ObjectMapper.class).readValue(json, RobotReplyData.class);
-                            if(!containsEmo)
-                                ReportBESA.debug("RECIBIENDO \n" + reply + "\n");
+                            //if(!containsEmo)
+                                //ReportBESA.debug("RECIBIENDO \n" + reply + "\n");
                             handleRobotData(reply);
                         } catch (JsonProcessingException e) {
                             e.printStackTrace();

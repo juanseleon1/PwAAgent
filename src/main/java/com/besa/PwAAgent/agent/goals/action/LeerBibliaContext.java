@@ -1,41 +1,19 @@
 package com.besa.PwAAgent.agent.goals.action;
 
-import java.util.Map;
+import java.util.List;
 
-import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.InteractionState.InteractionContext.ServiceContext;
 import BESA.SocialRobot.ServiceProvider.agent.adapter.RobotData;
 import rational.data.InfoData;
 
 public class LeerBibliaContext extends ServiceContext {
 
-    private String wordRecognized = null;
     private boolean quiereParar = false;
-
-    @Override
-    public boolean update(InfoData data) {
-        ReportBESA.debug("JLEON1 Ejecutando update de LeerBibliaContext");
-        boolean update = false;
-        RobotData robotData = (RobotData) data;
-        Map<String, ?> response = robotData.getParameters();
-        if (response.containsKey("wordRecognized")) {
-            wordRecognized = (String) response.get("wordRecognized");
-            quiereParar = wordRecognized.equals("parar") || wordRecognized.equals("no mas");
-            update = true;
-        }
-        return update;
-    }
+    private List<String> frases;
+    private int index = 0;
 
     public boolean getYaQuiereParar() {
         return quiereParar;
-    }
-
-    public String getWordRecognized() {
-        return wordRecognized;
-    }
-
-    public void setWordRecognized(String wordRecognized) {
-        this.wordRecognized = wordRecognized;
     }
 
     public boolean isQuiereParar() {
@@ -49,9 +27,47 @@ public class LeerBibliaContext extends ServiceContext {
     @Override
     public LeerBibliaContext clone() {
         LeerBibliaContext cloned = new LeerBibliaContext();
-        cloned.wordRecognized = wordRecognized;
         cloned.quiereParar = quiereParar;
         return cloned;
     }
+
+    @Override
+    public boolean handleOtherData(InfoData arg0) {
+        return false;
+    }
+
+    @Override
+    public boolean handleRobotData(RobotData arg0) {
+        return false;
+    }
+
+    public List<String> getFrases() {
+        return frases;
+    }
+
+    public void setFrases(List<String> frases) {
+        this.frases = frases;
+        this.index = 0;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    @Override
+    public String captureRecordData() {
+        return this.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Actividad Espiritual";
+    }
+
+    
 
 }

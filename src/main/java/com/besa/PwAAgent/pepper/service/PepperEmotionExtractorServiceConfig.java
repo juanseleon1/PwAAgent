@@ -68,7 +68,7 @@ public class PepperEmotionExtractorServiceConfig extends EmotionExtractorService
         emotions.add(new UserEmotion(Emotion.excitement.name(), excval));
         emotions.add(new UserEmotion(Emotion.surprise.name(), surval));
         emotions.add(new UserEmotion(Emotion.attention.name(), atval));
-        ReportBESA.debug("Emotions: " + emotions.size());
+        //ReportBESA.debug("Emotions: " + emotions.size());
 
         return new UserEmotionalData(userID, EmotionalDataType.FACE, emotions);
     }

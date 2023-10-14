@@ -1,6 +1,5 @@
 package com.besa.PwAAgent.agent.tasks.MusicoTerapia;
 
-
 import rational.mapping.Believes;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +15,6 @@ import com.besa.PwAAgent.utils.personalization.ModeloSeleccion;
 import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.SRTask;
-
 
 public class ReproduccionCancion extends SRTask {
 
@@ -34,10 +32,9 @@ public class ReproduccionCancion extends SRTask {
         BeliefAgent blvs = (BeliefAgent) parameters;
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
-        userName =  miPerfil.getNombre();
+        userName = miPerfil.getNombre();
         PwAPreferenceContext prefContext = (PwAPreferenceContext) miPerfil.getPwAPreferenceContext();
         MusicoTerapiaContext musicoterapiaContext = (MusicoTerapiaContext) blvs.getServiceContext(MusicoTerapia.class);
-
 
         List<PreferenciaXBaile> bailes = prefContext.getPreferenciaXBaileList();
 
@@ -73,7 +70,26 @@ public class ReproduccionCancion extends SRTask {
         super.interruptTask(believes);
         BeliefAgent blvs = (BeliefAgent) believes;
         MusicoTerapiaContext musicoterapiaContext = (MusicoTerapiaContext) blvs.getServiceContext(MusicoTerapia.class);
-        ReportBESA.debug("--- Interrupt Task Seleccionar Cancion ---");
+        //ReportBESA.debug("--- Interrupt Task Seleccionar Cancion ---");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Oh, espera");
+        sb.append(userName);
+        sb.append(", tenemos que hacer algo mas importante. Ya vuelvo a ponerte ");
+        sb.append(musicoterapiaContext.getCancionActual().getCancion().getNombre());
+        infoServicio = new HashMap<>();
+        infoServicio.put("content", sb.toString());
+        infoServicio.put("style", "animated");
+        sendActionRequest(infoServicio, "talk");
+        envioVideo = false;
+    }
+
+    @Override
+    public void cancelTask(Believes believes) {
+        super.cancelTask(believes);
+        //ReportBESA.debug("--- Cancel Task Busqueda Cancion ---");
+        BeliefAgent blvs = (BeliefAgent) believes;
+        MusicoTerapiaContext musicoterapiaContext = (MusicoTerapiaContext) blvs.getServiceContext(MusicoTerapia.class);
+        envioVideo = false;
         StringBuilder sb = new StringBuilder();
         sb.append("Oh, espera");
         sb.append(userName);
@@ -86,25 +102,16 @@ public class ReproduccionCancion extends SRTask {
     }
 
     @Override
-    public void cancelTask(Believes believes) {
-                super.cancelTask(believes);
-        ReportBESA.debug("--- Cancel Task Busqueda Cancion ---");
-        BeliefAgent blvs = (BeliefAgent) believes;
-        MusicoTerapiaContext musicoterapiaContext = (MusicoTerapiaContext) blvs.getServiceContext(MusicoTerapia.class);
-        musicoterapiaContext.setCancionActual(null);
-    }
-
-    @Override
     public boolean checkFinish(Believes believes) {
 
         BeliefAgent blvs = (BeliefAgent) believes;
         MusicoTerapiaContext musicoterapiaContext = (MusicoTerapiaContext) blvs.getServiceContext(MusicoTerapia.class);
-        ReportBESA.debug("videoEnded" + musicoterapiaContext.isVideoHasEnded());
+        //ReportBESA.debug("videoEnded" + musicoterapiaContext.isVideoHasEnded());
 
         if (musicoterapiaContext.isVideoHasEnded()) {
-            ReportBESA.debug("in videoEnded" + envioVideo);
+            //ReportBESA.debug("in videoEnded" + envioVideo);
             if (envioVideo) {
-                ReportBESA.debug("in videoEnded" + envioVideo);
+                //ReportBESA.debug("in videoEnded" + envioVideo);
                 envioVideo = false;
                 infoServicio = new HashMap<>();
                 infoServicio.put("mode", "killAll");

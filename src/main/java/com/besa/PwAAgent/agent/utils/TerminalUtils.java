@@ -13,8 +13,10 @@ import BESA.BDI.AgentStructuralModel.GoalBDI;
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.BDI.AgentStructuralModel.LatentGoalStructure.LatentGoal;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.MotivationAgent;
+import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.autonomy.request.Request;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.ServiceGoal;
 import BESA.SocialRobot.ExplainabilityAgent.agent.ExplainabilityAgentState;
+import BESA.SocialRobot.ExplainabilityAgent.model.EventRecord;
 import BESA.SocialRobot.ServiceProvider.agent.adapter.RobotData;
 import BESA.SocialRobot.ServiceProvider.agent.guard.RobotReplyData;
 import BESA.SocialRobot.ServiceProvider.services.ServiceNames;
@@ -37,6 +39,13 @@ public class TerminalUtils implements Runnable {
         this.receiver = receiver;
     }
 
+    public TerminalUtils(MessageAdapterReceiver receiver) {
+        this.scanner = new Scanner(System.in);
+        this.ready = new AtomicBoolean(true);
+        this.permissions = new ConcurrentHashMap<>();
+        this.receiver = receiver;
+    }
+
     @Override
     public void run() {
         StateBDI state = (StateBDI) agent.getState();
@@ -53,10 +62,9 @@ public class TerminalUtils implements Runnable {
         while (ready.get()) {
             write("Seleccione la meta:");
             write("1. Aprobar Permisos");
-            write("2. Cambiar Objetivo del Agente");
-            write("3. Ver Proceso de Toma de Decisiones");
+            write("2. Ver Proceso de Toma de Decisiones");
+            write("3. Cambiar Objetivo del Agente");
             write("4. Activar Metas");
-            write("-1. Salir");
 
             System.out.print("Seleccione: ");
             int choice = scanner.nextInt();
@@ -66,10 +74,10 @@ public class TerminalUtils implements Runnable {
                     approvePermissions();
                     break;
                 case 2:
-                    changeLatentGoals();
+                    showReasoning();
                     break;
                 case 3:
-                    showReasoning();
+                    changeLatentGoals();
                     break;
                 case 4:
                     activateBDIGoals();
@@ -90,7 +98,7 @@ public class TerminalUtils implements Runnable {
         while (!exit) {
             int i = 1;
             for (ServiceGoal<?> serviceGoal : services) {
-                write(i + ". " + serviceGoal.getClass().getSimpleName() + "Estado: "
+                write(i + ". " + serviceGoal.getClass().getSimpleName() + " Estado: "
                         + (serviceGoal.isAuthorized() ? "Activa" : "Desactivada"));
                 i++;
             }
@@ -115,6 +123,29 @@ public class TerminalUtils implements Runnable {
     }
 
     private void showReasoning() {
+        boolean exit = false;
+        while (!exit) {
+            EventRecord decisionRecord = records.getLatestDecisionRecord();
+            EventRecord innerStateRecord = records.getLatestInnerStateRecord();
+            EventRecord userState = records.getLatestUserStateRecord();
+            if (decisionRecord != null) {
+                write("Toma De Decisiones del Robot");
+                write(decisionRecord.toString());
+            }
+
+            if (innerStateRecord != null) {
+                write("Estado Interno del Robot");
+                write(innerStateRecord.toString());
+            }
+
+            if (userState != null) {
+                write("Estado del Usuario");
+                write(userState.toString());
+            }
+            write("-1. Salir");
+            int meta = scanner.nextInt();
+            exit = meta == -1;
+        }
     }
 
     private void changeLatentGoals() {
@@ -122,7 +153,7 @@ public class TerminalUtils implements Runnable {
         while (!exit) {
             int i = 1;
             for (LatentGoal goal : latentGoals) {
-                write(i + ". " + goal.getClass().getSimpleName() + "Estado: "
+                write(i + ". " + goal.getClass().getSimpleName() + " Estado: "
                         + (goal.isAuthorized() ? "Activa" : "Desactivada"));
                 i++;
             }
@@ -158,12 +189,13 @@ public class TerminalUtils implements Runnable {
         write("-1. Menu Anterior");
         int meta = scanner.nextInt();
         if (meta != -1) {
+            write("Revisando "+keyList.get(meta));
             write("1. Aprobar");
             write("2. Denegar");
             write("-1. Menu Anterior");
             int res = scanner.nextInt();
             if (res != -1) {
-                replyToPermission(keyList.get(meta), res==1);
+                replyToPermission(keyList.get(meta), res == 1);
             }
         }
     }
@@ -183,9 +215,14 @@ public class TerminalUtils implements Runnable {
         write(sb.toString());
     }
 
-    public void processPermissionRequest(double ack, String permission) {
-        sendPriorityNotification("HIGH", permission);
-        permissions.put(permission, ack);
+    public void processPermissionRequest(double ack, Request request) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Permission request for: ");
+        sb.append(request.getName());
+        sb.append("by user: ");
+        sb.append(request.getUserName());
+        sendPriorityNotification("NOTIFICACION: ", sb.toString());
+        permissions.put(request.getName(), ack);
     }
 
     private synchronized void write(String msg) {

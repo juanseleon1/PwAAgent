@@ -29,9 +29,10 @@ public class PepperInterpreterStrategy implements EmotionalInterpreterStrategy {
                     max = entry.getValue();
                 }
             }
-
-            EmotionalEvent event = new EmotionalEvent("user", action, maxEmo);
-            events.add(event);
+            if(max!=0){
+                EmotionalEvent event = new EmotionalEvent("user", action, maxEmo);
+                events.add(event);
+            }
         }
 
         return events;

@@ -26,10 +26,11 @@ public class PwAEnrichmentStrategy implements EnrichmentStrategy {
                         RobotActionProfile robotProfile,
                         EmotionalStateData emoData) {
                 List<ServiceDataRequest> serviceDataRequests = new ArrayList<>();
+                // ReportBESA.debug("emotionas: " + emoData.getEmotions().toString());
                 RobotEmotions currentEmotion = emoData.getEmotions().keySet().iterator().next();
                 double currentValue = emoData.getEmotions().get(currentEmotion);
-                ReportBESA.debug("ADIOS: " + data.getActionName());
-                ReportBESA.debug("ADIOS: " + currentEmotion.name());
+                // ReportBESA.debug("ADIOS: " + data.getActionName());
+                // ReportBESA.debug("ADIOS: " + currentEmotion.name());
 
                 Action action = robotProfile.getAction(data.getActionName());
                 Map<String, Object> params = new HashMap<>();
@@ -49,8 +50,9 @@ public class PwAEnrichmentStrategy implements EnrichmentStrategy {
                                                 params.put(parameter.getName(), speed);
                                                 break;
                                         case "ledColor":
-                                                params.put(parameter.getName(),
-                                                                parameter.getConfig(currentEmotion.name()));
+                                                String[] colors = parameter.getConfig(currentEmotion.name()).split("_");
+                                                String ledColor = selectLedColor(colors, currentValue);
+                                                params.put(parameter.getName(), ledColor);
                                                 break;
                                         case "ledIntensity":
                                                 float maxIntensity = Float
@@ -94,6 +96,20 @@ public class PwAEnrichmentStrategy implements EnrichmentStrategy {
                 }
                 return new ModulatedActionRequestData(data.getId(), data.getActionName(), data.getTaskName(),
                                 serviceDataRequests);
+        }
+
+        private String selectLedColor(String[] colors, double currentValue) {
+                double absValue = Math.abs(currentValue);
+                String value = "";
+                if (absValue >= 0.6 && absValue <= 1) {
+                        value = colors[0];
+                } else if (absValue >= 0.2 && absValue < 0.6) {
+                        value = colors[1];
+                } else if (absValue >= 0 && absValue < 0.2) {
+                        value = colors[2];
+                }
+
+                return value;
         }
 
 }

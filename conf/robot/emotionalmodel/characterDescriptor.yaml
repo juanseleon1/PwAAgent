@@ -4,12 +4,17 @@ emotionalModelDescriptors:
       user: Cercano
       robot: Amigo
       Abuela: Cercano
-      Caperucita: Cercano
+      Caperucita: Amigo
       Lobo: Enemigo
-      Cerdo: Cercano
+      Cerdo: Amigo
       Familia: Amigo
     eventDesirabilities:
       feels: Deseable
+      hates: Indeseable
+      liked: Deseable
+      wants: Deseable
+      took: Deseable
+      notook: Indeseable
       INTERNALPOSPLUS: Deseable
       INTERNALPOS: Algo Deseable
       INTERNALNEG: Algo Indeseable
@@ -46,6 +51,7 @@ emotionalModelDescriptors:
       VITOREAR: Deseable
       QUEMAR: Indeseable
     objectRelationships:
+      activity: Importante
       calm: Valioso
       anger: Repulsivo
       joy: Importante
@@ -53,7 +59,7 @@ emotionalModelDescriptors:
       laughter: Indiferente
       excitement: Indiferente
       surprise: Valioso
-      attention: Importante
+      attention: Indiferente
       Cerdo: Valioso
       Casa: Valioso
       Éxito: Importante
@@ -68,11 +74,16 @@ emotionalModelDescriptors:
     emotionalAxis:
       - positiveName: HAPPINESS
         negativeName: SADNESS
-        currentValue: 0.2
-        baseValue: 0
-        forgetFactor: 0.1
+        currentValue: 0.0
+        baseValue: 0.3
+        forgetFactor: 0.7
         eventInfluences:
           feels: 1
+          hates: 1
+          liked: 1
+          wants: 1
+          took: 1
+          notook: 1
           INTERNALPOSPLUS: 0.7
           INTERNALPOS: 0.3
           INTERNALNEG: 0.3

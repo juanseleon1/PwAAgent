@@ -3,6 +3,7 @@ package com.besa.PwAAgent.pepper.emotion;
 import java.util.HashMap;
 import java.util.Map;
 
+import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionModulator.guard.EmotionalStateData;
 import BESA.SocialRobot.BDIAgent.ActionAgent.ActionModulator.guard.RobotEmotions;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.PsychologicalState.AgentEmotionalState.AgentEmotionalState;
@@ -16,8 +17,8 @@ public class PepperEmotionalStrategy implements RobotEmotionalStrategy {
         EmotionalStateData emoData = null;
         try {
             Map<RobotEmotions, Double> emotions = new HashMap<>();
-            EmotionAxis emotion;
-            emotion = state.getMostActivatedEmotion();
+            EmotionAxis emotion = state.getMostActivatedEmotion();
+            //ReportBESA.debug("ACTIVATED EMOTION "+ emotion);
             double currValue = emotion.getCurrentValue();
             String emotionName = currValue > 0 ? emotion.getPositiveName() : emotion.getNegativeName();
             emotions.put(RobotEmotions.valueOf(emotionName), currValue);

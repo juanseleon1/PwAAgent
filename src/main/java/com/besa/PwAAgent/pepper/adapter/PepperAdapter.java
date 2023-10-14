@@ -1,5 +1,5 @@
 package com.besa.PwAAgent.pepper.adapter;
-//TODO: activate and deactivate all services in Pepper
+
 import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.Map;
@@ -25,11 +25,11 @@ public class PepperAdapter extends SRAdapter {
     @Override
     public synchronized void sendRequest(RobotData data) {
         String json;
-        ReportBESA.debug("SENDING REQUEST " + data);
+        //ReportBESA.debug("SENDING REQUEST " + data);
         try (Socket s = new Socket(robotIP, robotPort);
                 DataOutputStream oos = new DataOutputStream(s.getOutputStream())) {
             json = convertServiceRequest(data);
-            ReportBESA.debug("ENVIANDO \n" + json);
+            //ReportBESA.debug("ENVIANDO \n" + json);
             oos.writeUTF(json + "\n\r");
             oos.flush();
         } catch (JsonProcessingException e) {
@@ -41,7 +41,7 @@ public class PepperAdapter extends SRAdapter {
     private String convertServiceRequest(RobotData data) throws JsonProcessingException {
         PepperSendable s = new PepperSendable(data.getId(), data.getFunction(), data.getFunction(),
                 (Map<String,Object>)data.getParameters());
-        ReportBESA.debug("SENDING sendable " + s);
+        //ReportBESA.debug("SENDING sendable " + s);
         return SpringContext.getBean(ObjectMapper.class).writeValueAsString(s);
     }
 

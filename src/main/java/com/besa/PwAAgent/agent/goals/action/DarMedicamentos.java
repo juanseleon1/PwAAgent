@@ -4,7 +4,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.besa.PwAAgent.agent.tasks.DarMedicamentos.EnviarReporteCuidador;
 import com.besa.PwAAgent.agent.tasks.DarMedicamentos.EsperarConfirmacion;
+import com.besa.PwAAgent.agent.tasks.DarMedicamentos.PrepararInformacion;
 import com.besa.PwAAgent.agent.tasks.DarMedicamentos.RecordarSobreMedicamentos;
 import com.besa.PwAAgent.db.model.userprofile.FranjaMedicamento;
 import com.besa.PwAAgent.db.model.userprofile.PwAMedicalContext;
@@ -12,6 +14,7 @@ import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
 
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
+import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.MotivationAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.ServiceGoal;
@@ -25,7 +28,9 @@ public class DarMedicamentos extends ServiceGoal<DarMedicamentosContext> {
 
     public static DarMedicamentos buildGoal() {
         RecordarSobreMedicamentos retro = new RecordarSobreMedicamentos();
+        PrepararInformacion preparar = new PrepararInformacion();
         EsperarConfirmacion recomCuento = new EsperarConfirmacion();
+        EnviarReporteCuidador enviarReporteCuidador = new EnviarReporteCuidador();
 
         List<Task> taskList;
         Plan rolePlan = new Plan();
@@ -34,7 +39,16 @@ public class DarMedicamentos extends ServiceGoal<DarMedicamentosContext> {
 
         taskList = new ArrayList<>();
         taskList.add(retro);
+        rolePlan.addTask(preparar, taskList);
+
+
+        taskList = new ArrayList<>();
+        taskList.add(preparar);
         rolePlan.addTask(recomCuento, taskList);
+
+        taskList = new ArrayList<>();
+        taskList.add(recomCuento);
+        rolePlan.addTask(enviarReporteCuidador, taskList);
 
         RationalRole medicamentoRole = new RationalRole(descrip, rolePlan);
         DarMedicamentos b = new DarMedicamentos(MotivationAgent.getPlanID(), medicamentoRole);
@@ -42,7 +56,7 @@ public class DarMedicamentos extends ServiceGoal<DarMedicamentosContext> {
     }
 
     public DarMedicamentos(int id, RationalRole role) {
-        super(id, role, descrip, 100, new DarMedicamentosContext());
+        super(id, role, descrip, 1, new DarMedicamentosContext());
     }
 
     @Override
@@ -50,33 +64,29 @@ public class DarMedicamentos extends ServiceGoal<DarMedicamentosContext> {
         BeliefAgent blvs = (BeliefAgent) beliefs;
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
-        PwAMedicalContext medicalContext = miPerfil.getUserMedicalContext();
-        return medicalContext.getTomaMedicamentos();
-    }
-
-    @Override
-    public double evaluateContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA {
-        BeliefAgent blvs = (BeliefAgent) stateBDI.getBelieves();
-        String currUser = blvs.getActiveUsers().get(0);
-        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
         double result = 0;
         PwAMedicalContext medicalContext = miPerfil.getUserMedicalContext();
-        
+
         LocalTime now = LocalTime.now();
         FranjaMedicamento franja = null;
-        
+
         for (FranjaMedicamento franjas : medicalContext.getFranjaMedicamentoList()) {
-            
-            if (now.isBefore(franjas.getHora().minusMinutes(5))) {
+
+            if (now.isBefore(franjas.getHora()) && !franjas.isDone()) {
                 franja = franjas;
                 break;
             }
         }
 
-        if(franja != null){
-            result+=1;
+        if (franja != null) {
+            result += 1;
         }
         return result;
+    }
+
+    @Override
+    public double evaluateContribution(StateBDI stateBDI) throws KernellAgentEventExceptionBESA {
+        return 1;
     }
 
     @Override
@@ -94,8 +104,27 @@ public class DarMedicamentos extends ServiceGoal<DarMedicamentosContext> {
     @Override
     public boolean goalSucceeded(Believes beliefs) throws KernellAgentEventExceptionBESA {
         BeliefAgent blvs = (BeliefAgent) beliefs;
-        DarMedicamentosContext context = (DarMedicamentosContext)blvs.getServiceContext(DarMedicamentos.class);
-        return context.isConfirmacionMedicamentos();
+        String currUser = blvs.getActiveUsers().get(0);
+        PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
+        PwAMedicalContext medicalContext = miPerfil.getUserMedicalContext();
+
+        LocalTime now = LocalTime.now();
+        FranjaMedicamento franja = null;
+
+        for (FranjaMedicamento franjas : medicalContext.getFranjaMedicamentoList()) {
+
+            if (now.isBefore(franjas.getHora().minusMinutes(5)) || now.plusMinutes(30).isAfter(franjas.getHora())) {
+                franja = franjas;
+                break;
+            }
+        }
+        //ReportBESA.debug("goalSucceeded "+(franja != null));
+        if(franja!=null){
+            //ReportBESA.debug("goalSucceeded "+franja.isDone());
+        }
+        //ReportBESA.debug("goalSucceeded "+(franja != null && franja.isDone()));
+
+        return franja == null || (franja != null && franja.isDone());
     }
 
     @Override

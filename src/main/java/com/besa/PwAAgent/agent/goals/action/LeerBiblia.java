@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.besa.PwAAgent.agent.tasks.LeerBiblia.AnimarAActividad;
 import com.besa.PwAAgent.agent.tasks.LeerBiblia.CerrarActividadEspiritual;
+import com.besa.PwAAgent.agent.tasks.LeerBiblia.PrepararActividadEspiritual;
 import com.besa.PwAAgent.agent.tasks.LeerBiblia.RealizarActividadEspiritual;
 import com.besa.PwAAgent.db.model.userprofile.PwAPreferenceContext;
 import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
@@ -29,6 +30,7 @@ public class LeerBiblia extends ServiceGoal<LeerBibliaContext> {
     public static LeerBiblia buildGoal() {
         AnimarAActividad retro = new AnimarAActividad();
         RealizarActividadEspiritual recomCuento = new RealizarActividadEspiritual();
+        PrepararActividadEspiritual preparar = new PrepararActividadEspiritual();
         CerrarActividadEspiritual cerrar = new CerrarActividadEspiritual();
 
         List<Task> taskList;
@@ -38,6 +40,10 @@ public class LeerBiblia extends ServiceGoal<LeerBibliaContext> {
 
         taskList = new ArrayList<>();
         taskList.add(retro);
+        rolePlan.addTask(preparar, taskList);
+
+        taskList = new ArrayList<>();
+        taskList.add(preparar);
         rolePlan.addTask(recomCuento, taskList);
 
         taskList = new ArrayList<>();
@@ -65,7 +71,7 @@ public class LeerBiblia extends ServiceGoal<LeerBibliaContext> {
             lastActivity = LocalTime.now().minusHours(7);
         }
         Religion religion = preferenceContext.getReligion();
-        Duration duration = Duration.between(lastActivity, now);
+        Duration duration = Duration.between(lastActivity, now).abs();
         int level = preferenceContext.getNivelReligioso();
 
         boolean activityNeeded = level != 0 && duration.toMinutes() > getMaxTime(level);
@@ -138,16 +144,13 @@ public class LeerBiblia extends ServiceGoal<LeerBibliaContext> {
             lastActivity = LocalTime.now().minusHours(7);
         }
         Religion religion = preferenceContext.getReligion();
-        Duration duration = Duration.between(lastActivity, now);
+        Duration duration = Duration.between(lastActivity, now).abs();
         int level = preferenceContext.getNivelReligioso();
 
         boolean activityNeeded = level != 0 && duration.toMinutes() > getMaxTime(level);
-        LeerBibliaContext context = (LeerBibliaContext) blvs.getServiceContext(LeerBiblia.class);
-        boolean goalSucceeded = context.getYaQuiereParar();
-        ReportBESA.debug("goalSucceeded: " + goalSucceeded);
-        ReportBESA.debug("goalSucceeded2: " + !(!religion.getName().equalsIgnoreCase("ateo") && activityNeeded));
+        //ReportBESA.debug("goalSucceeded2: " + !(!religion.getName().equalsIgnoreCase("ateo") && activityNeeded));
 
-        return goalSucceeded || !(!religion.getName().equalsIgnoreCase("ateo") && activityNeeded);
+        return !(!religion.getName().equalsIgnoreCase("ateo") && activityNeeded);
     }
 
     @Override

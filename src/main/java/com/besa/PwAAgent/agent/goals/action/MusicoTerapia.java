@@ -3,7 +3,6 @@ package com.besa.PwAAgent.agent.goals.action;
 
 import BESA.BDI.AgentStructuralModel.StateBDI;
 import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
-import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.MotivationAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.ServiceGoal;
@@ -35,8 +34,13 @@ public class MusicoTerapia extends ServiceGoal<MusicoTerapiaContext> {
     public static MusicoTerapia buildGoal() {
         SeleccionarCancion sCancion = new SeleccionarCancion();
         ReproduccionCancion rCancion = new ReproduccionCancion();
-        List<String> preguntas = new ArrayList<>(); // TODO
-        RealizarRetroalimentacion retro = new RealizarRetroalimentacion(preguntas);
+        List<String> preguntas = new ArrayList<>();
+        preguntas.add("De uno a cinco, ¿que tanto te gustó la actividad?");
+        preguntas.add("De uno a cinco, ¿que tal te parecio la cancion que escucho?");
+        preguntas.add("De uno a cinco, ¿como te parecio mi atencion?");
+
+        RealizarRetroalimentacion retro = new RealizarRetroalimentacion(preguntas,
+                "¡Ahora que finalizo la canción, me gustaria saber tu opinion!");
         ResponderRetroalimentacion retroR = new ResponderRetroalimentacion();
         List<Task> tarea;
         Plan rolePlan = new Plan();
@@ -65,13 +69,13 @@ public class MusicoTerapia extends ServiceGoal<MusicoTerapiaContext> {
 
     @Override
     public double evaluateViability(Believes believes) throws KernellAgentEventExceptionBESA {
-        // ReportBESA.debug("Meta MusicoTerapia evaluateViability");
+        // //ReportBESA.debug("Meta MusicoTerapia evaluateViability");
         return 1;
     }
 
     @Override
     public double detectGoal(Believes believes) throws KernellAgentEventExceptionBESA {
-        ReportBESA.debug("Meta MusicoTerapia detectGoal");
+        //ReportBESA.debug("Meta MusicoTerapia detectGoal");
         BeliefAgent blvs = (BeliefAgent) believes;
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
@@ -81,7 +85,7 @@ public class MusicoTerapia extends ServiceGoal<MusicoTerapiaContext> {
 
         Map<String, Double> emotions = blvs.getInteractionState().getCurrentInteraction(currUser).getUserEmotions();
         String maxEmotion = findMaxEmotionName(emotions);
-        ReportBESA.debug("emotions" + emotions);
+        //ReportBESA.debug("emotions" + emotions);
         double max = -1;
 
         if (emotions.size() > 0) {
@@ -90,11 +94,11 @@ public class MusicoTerapia extends ServiceGoal<MusicoTerapiaContext> {
                 max *= -1;
             }
         }
-        ReportBESA.debug("maxEmotion" + maxEmotion);
-        ReportBESA.debug("valor" + valor);
-        ReportBESA.debug("max" + max);
-        ReportBESA.debug("MUSICOTERAPIA++" + (0.4 + valor) * (1 + max));
-        ReportBESA.debug("MEDICALCONTEXT++" + medicalContext.getFast());
+        //ReportBESA.debug("maxEmotion" + maxEmotion);
+        //ReportBESA.debug("valor" + valor);
+        //ReportBESA.debug("max" + max);
+        //ReportBESA.debug("MUSICOTERAPIA++" + (0.4 + valor) * (1 + max));
+        //ReportBESA.debug("MEDICALCONTEXT++" + medicalContext.getFast());
 
         if (medicalContext.getFast() <= 4) {
             return (0.4 + valor) * (1 + max);

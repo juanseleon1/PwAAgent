@@ -31,9 +31,12 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
     private static String descrip = "Cuenteria";
 
     public static Cuenteria buildGoal() {
-        List<String> preguntas = new ArrayList<>(); // TODO
+        List<String> preguntas = new ArrayList<>();
         CuenteriaContext context = new CuenteriaContext();
-        RealizarRetroalimentacion retro = new RealizarRetroalimentacion(preguntas);
+        preguntas.add("De uno a cinco, ¿que te parecio la actividad?");
+        preguntas.add("De uno a cinco, ¿que tanto te gusto el cuento?");
+        preguntas.add("De uno a cinco, ¿como evaluarias mi atención?");
+        RealizarRetroalimentacion retro = new RealizarRetroalimentacion(preguntas, "Ahora que se acabo el cuento, quiero conocer tu opinion sobre la actividad.");
         ResponderRetroalimentacion retroR = new ResponderRetroalimentacion();
         SeleccionarCuento recomCuento = new SeleccionarCuento();
         ReproducirCuento rCuento = new ReproducirCuento();
@@ -50,7 +53,7 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
         taskList = new ArrayList<>();
         taskList.add(rCuento);
         rolePlan.addTask(retro, taskList);
-
+        
         taskList = new ArrayList<>();
         taskList.add(retro);
         rolePlan.addTask(retroR, taskList);
@@ -71,22 +74,18 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
 
     @Override
     public double detectGoal(Believes believes) throws KernellAgentEventExceptionBESA {
-        ReportBESA.debug("Meta Cuenteria detectGoal");
+        //ReportBESA.debug("Meta Cuenteria detectGoal");
         BeliefAgent blvs = (BeliefAgent) believes;
         String currUser = blvs.getActiveUsers().get(0);
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
 
         PwAMedicalContext medicalContext = (PwAMedicalContext) miPerfil.getUserMedicalContext();
-        PwAPreferenceContext prefContext = (PwAPreferenceContext) miPerfil.getPwAPreferenceContext();
         UserInteractionState interactionContext = blvs.getInteractionState().getCurrentInteraction(currUser);
         Map<String, Double> userEmotions = interactionContext.getUserEmotions();
-
+        //ReportBESA.debug("log user Emotions: " + userEmotions.toString());
         if (medicalContext.getFast() <= 5) {
             if (userEmotions.size() > 0) {
-                if (userEmotions.get("attention") < 0.4
-                        && userEmotions.get("calm") < 0.6) {
-                    return 0.4 + PwAUtil.getGustoActividad(PwAService.CUENTERIA, prefContext);
-                }
+                return userEmotions.get("calm") < 0.6 ? 1 : 0;
             }
         }
         return 0;
@@ -120,8 +119,7 @@ public class Cuenteria extends ServiceGoal<CuenteriaContext> {
 
         UserInteractionState interactionContext = blvs.getInteractionState().getCurrentInteraction(currUser);
         Map<String, Double> userEmotions = interactionContext.getUserEmotions();
-        return (userEmotions.get("attention") >= 0.4
-                && userEmotions.get("calm") >= 0.6);
+        return (userEmotions.get("calm") >= 0.6);
     }
 
     @Override

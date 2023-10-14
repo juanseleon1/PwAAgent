@@ -7,11 +7,14 @@ import java.util.Map;
 
 import com.besa.PwAAgent.agent.goals.action.DarMedicamentos;
 import com.besa.PwAAgent.agent.goals.action.DarMedicamentosContext;
+import com.besa.PwAAgent.agent.utils.RoleUtils;
 import com.besa.PwAAgent.db.model.userprofile.Dosis;
 import com.besa.PwAAgent.db.model.userprofile.FranjaMedicamento;
 import com.besa.PwAAgent.db.model.userprofile.PwAProfile;
 
+import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
+import BESA.SocialRobot.BDIAgent.BeliefAgent.InteractionState.InteractionContext.ConversationContext;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.PsychologicalState.AgentEmotionalState.AgentEmotionalState;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.PsychologicalState.AgentEmotionalState.EmotionalModel.EmotionalEvent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.SRTask;
@@ -22,8 +25,15 @@ public class EnviarReporteCuidador extends SRTask {
     @Override
     public void executeTask(Believes beliefs) {
         BeliefAgent blvs = (BeliefAgent) beliefs;
+        blvs.getInteractionState().setActiveService(DarMedicamentos.class.getName());
         AgentEmotionalState state = blvs.getPsychologicalState().getAgentEmotionalState();
         String currUser = blvs.getActiveUsers().get(0);
+        ConversationContext convContext = blvs.getInteractionState().getCurrentConversation(currUser);
+        if (!convContext.getLastMessage().equals("si")) {
+            //ReportBESA.debug("I AM ANGRYYYYY");
+            RoleUtils.setSadnessEmotionalAgentRole();
+        }
+
         PwAProfile miPerfil = (PwAProfile) blvs.getUserProfile(currUser);
         String userName = miPerfil.getNombre();
         DarMedicamentosContext darMedicamentosContext = (DarMedicamentosContext) blvs
@@ -34,28 +44,25 @@ public class EnviarReporteCuidador extends SRTask {
         String evento = null;
         Map<String, Object> infoServicio = new HashMap<>();
         reporte.append(userName);
-        if (darMedicamentosContext.isConfirmacionMedicamentos()) {
+        if (convContext.getLastMessage().equals("si")) {
             reporte.append("se tomo los medicamentos a las" + LocalTime.now().toString());
             sb.append(userName);
-            sb.append("me alegra que te hayas tomado los medicamentos!");
+            sb.append(", me alegra que te hayas tomado los medicamentos!");
             infoServicio.put("style", "animated");
-            sendActionRequest(infoServicio, "talk");
-            evento = "tomo";
+            evento = "took";
         } else {
             reporte.append("no se tomo los medicamentos");
             sb.append(userName);
-            sb.append("deberias tomarte los medicamentos!");
-            evento = "no tomo";
+            sb.append(", deberias tomarte los medicamentos!");
+            evento = "notook";
         }
-        EmotionalEvent event = new EmotionalEvent("usuario", evento, "medicamentos");
+        EmotionalEvent event = new EmotionalEvent("user", evento, "medicine");
         state.processEmotionalEvent(event);
         try {
-            wait(1000);
+            wait(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        infoServicio.put("content", sb.toString());
-        sendActionRequest(infoServicio, "talk");
         reporte.append("\n\n\n\n\n");
 
         FranjaMedicamento franja = darMedicamentosContext.getCurrentFranja();
@@ -65,6 +72,8 @@ public class EnviarReporteCuidador extends SRTask {
             reporte.append("miligramos de");
             reporte.append(dosis.getMedicamento());
         });
+        infoServicio.put("content", sb.toString());
+        sendActionRequest(infoServicio, "talk");
     }
 
     @Override
@@ -73,12 +82,21 @@ public class EnviarReporteCuidador extends SRTask {
         DarMedicamentosContext darMedicamentosContext = (DarMedicamentosContext) blvs
                 .getServiceContext(DarMedicamentos.class);
         boolean shouldFinish = super.checkFinish(beliefs);
+        //ReportBESA.debug("IS OUT. SHOULD FINISH  " + shouldFinish);
+
         if (shouldFinish) {
-            darMedicamentosContext.setConfirmacionMedicamentos(false);
+            RoleUtils.sendDefaultEmotionalAgentRole();
+            //ReportBESA.debug("IS OUT. SHOULD FINISH");
+            FranjaMedicamento franja = darMedicamentosContext.getCurrentFranja();
+            if (franja != null) {
+                franja.setDone(true);
+            }
             darMedicamentosContext.setCurrentFranja(null);
-            darMedicamentosContext.setWordRecognized(null);
+            darMedicamentosContext.setMedicamentos(null);
         }
+
         return shouldFinish;
     }
 
+    
 }

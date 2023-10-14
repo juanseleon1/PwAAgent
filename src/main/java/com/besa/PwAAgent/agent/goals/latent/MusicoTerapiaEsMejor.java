@@ -6,15 +6,15 @@ import BESA.Kernel.Agent.Event.KernellAgentEventExceptionBESA;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.MotivationAgent;
 import rational.mapping.Believes;
 
-public class PerformActivities extends LatentGoal {
+public class MusicoTerapiaEsMejor extends LatentGoal {
 
-    public PerformActivities() {
+    public MusicoTerapiaEsMejor() {
         super(MotivationAgent.getPlanID());
     }
 
     @Override
     public double detectGoal(Believes beliefs) throws KernellAgentEventExceptionBESA {
-        return 1;
+        return this.isAuthorized() ? 1 : 0;
     }
 
     @Override

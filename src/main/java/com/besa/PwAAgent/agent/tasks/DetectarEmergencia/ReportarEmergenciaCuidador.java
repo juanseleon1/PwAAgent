@@ -11,6 +11,7 @@ import rational.mapping.Believes;
 public class ReportarEmergenciaCuidador extends SRTask {
     private HashMap<String, Object> infoServicio = new HashMap<>();
     private String userName;
+    private boolean isFinished;
 
     @Override
     public void executeTask(Believes parameters) {
@@ -37,10 +38,17 @@ public class ReportarEmergenciaCuidador extends SRTask {
         sb.append(userName);
         sb.append(" ");
         sb.append(miPerfil.getApellido());
-        sb.append("ha sufrido un accidente. Lo apoyaré mientras llegas.");
+        sb.append(" ha sufrido un accidente. Lo apoyaré mientras llegas.");
         infoServicio.put("message", sb.toString());
-        infoServicio.put("priority", "HIGH");
+        infoServicio.put("priority", "ALERTA::");
         sendActionRequest(infoServicio, "sendMessageAction");
     }
 
+    @Override
+    public boolean checkFinish(Believes beliefs) {
+        if (super.checkFinish(beliefs) && !isFinished) {
+            isFinished = true;
+        }
+        return isFinished;
+    }
 }

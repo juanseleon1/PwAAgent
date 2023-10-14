@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.InteractionState.InteractionContext.ServiceContext;
 import net.sourceforge.jFuzzyLogic.FIS;
 import net.sourceforge.jFuzzyLogic.FunctionBlock;
@@ -26,7 +27,7 @@ public abstract class UserEvaluableContext extends ServiceContext {
         }
     }
 
-    public String calculateFeedback(double emotionValence) {
+    public String calculateFeedback(double emotionValence, BeliefAgent blvs) {
         HashMap<String, Double> resultados = new HashMap<>();
         resultados.put("Cinco", retroValues.stream().filter(retroa -> retroa.equalsIgnoreCase("Cinco")).count() * 5d);
         resultados.put("Cuatro", retroValues.stream().filter(retroa -> retroa.equalsIgnoreCase("Cuatro")).count() * 4d);
@@ -39,11 +40,11 @@ public abstract class UserEvaluableContext extends ServiceContext {
                 .average()
                 .orElse(0.0);
         double factor = calculateEvaluableFactor(emotionValence, average);
-        updateTasteForRelatedObjs(factor);
+        updateTasteForRelatedObjs(blvs, factor);
         return factor > 0.5 ? "Positive" : "Negative";
     }
 
-    public abstract void updateTasteForRelatedObjs(double factor);
+    public abstract void updateTasteForRelatedObjs(BeliefAgent blvs, double factor);
 
     public List<String> getRetroValues() {
         return retroValues;

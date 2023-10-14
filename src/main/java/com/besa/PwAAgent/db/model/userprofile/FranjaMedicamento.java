@@ -1,6 +1,7 @@
 package com.besa.PwAAgent.db.model.userprofile;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import jakarta.persistence.Basic;
@@ -16,8 +17,10 @@ public class FranjaMedicamento {
     private int id;
     @Basic
     private LocalTime hora;
-    @Column(nullable= false)
-	@OneToMany(fetch = FetchType.EAGER)
+    @Basic
+    private boolean isDone;
+    @Column(nullable = false)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Dosis> dosis;
 
     public FranjaMedicamento() {
@@ -46,4 +49,28 @@ public class FranjaMedicamento {
     public void setDosis(List<Dosis> dosis) {
         this.dosis = dosis;
     }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        this.isDone = done;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm a");
+        String horaFormateada = hora.format(formatter);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hora: ").append(horaFormateada).append("\n");
+        sb.append("Completado: ").append(isDone).append("\n");
+        sb.append("Dosis:\n");
+        for (Dosis dosis : this.dosis) {
+            sb.append(dosis.toString()).append("\n");
+        }
+        return sb.toString();
+    }
+
 }

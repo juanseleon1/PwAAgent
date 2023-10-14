@@ -1,7 +1,5 @@
 package com.besa.PwAAgent.agent.tasks.Cuenteria;
 
-
-import BESA.Log.ReportBESA;
 import BESA.SocialRobot.BDIAgent.BeliefAgent.BeliefAgent;
 import BESA.SocialRobot.BDIAgent.MotivationAgent.bdi.srbdi.SRTask;
 import java.util.HashMap;
@@ -42,7 +40,7 @@ public class SeleccionarCuento extends SRTask {
         if (cromosoma != null) {
             cuentoSelected = cromosoma.getCuento();
             cuenteriaContext.setCuentoActual(cuentoSelected);
-            infoServicio.put("content", "Voy a contarte el cuento de " + cuentoSelected.getCuento().getNombre());
+            infoServicio.put("content", "Como se que te gustan los cuentos de "+ cuentoSelected.getCuento().getGenero().getGenero()+ ". Voy a contarte el cuento de " + cuentoSelected.getCuento().getNombre());
             infoServicio.put("style", "animated");
             sendActionRequest(infoServicio, "talk");
         }
@@ -52,7 +50,7 @@ public class SeleccionarCuento extends SRTask {
     @Override
     public void interruptTask(Believes believes) {
         super.interruptTask(believes);
-        ReportBESA.debug("--- Interrupt Task Recomendar Cuento ---");
+        //ReportBESA.debug("--- Interrupt Task Recomendar Cuento ---");
         StringBuilder sb = new StringBuilder();
         sb.append("Oh, espera");
         sb.append(userName);
@@ -66,7 +64,7 @@ public class SeleccionarCuento extends SRTask {
     @Override
     public void cancelTask(Believes believes) {
         super.cancelTask(believes);
-        ReportBESA.debug("--- Cancel Task Recomendar Cuento ---");
+        //ReportBESA.debug("--- Cancel Task Recomendar Cuento ---");
         BeliefAgent blvs = (BeliefAgent) believes;
         CuenteriaContext cuenteriaContext = (CuenteriaContext) blvs.getServiceContext(Cuenteria.class);
         cuenteriaContext.setCuentoActual(null);
@@ -80,10 +78,3 @@ public class SeleccionarCuento extends SRTask {
     }
 
 }
-
-//TODO: Probar Meta de Medicamento
-//TODO: Expropiacion all metas
-//TODO: Configuracion Emocional + Ojos de Pepper
-//TODO: Retroalimentacion
-//TODO: acks perdiendose
-//TODO: Kill all.
